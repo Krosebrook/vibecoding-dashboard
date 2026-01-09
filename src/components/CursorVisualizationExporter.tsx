@@ -10,6 +10,7 @@ import { Slider } from '@/components/ui/slider'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Progress } from '@/components/ui/progress'
+import { ScrollArea } from '@/components/ui/scroll-area'
 import { 
   Export,
   FilmStrip,
@@ -24,7 +25,9 @@ import {
   Palette,
   Resize,
   Eye,
-  Image as ImageIcon
+  Image as ImageIcon,
+  Textbox,
+  Stamp
 } from '@phosphor-icons/react'
 import { toast } from 'sonner'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -45,6 +48,26 @@ interface ExportSettings {
   cursorColor: string
   trailLength: number
   playbackSpeed: number
+  watermark: {
+    enabled: boolean
+    text: string
+    position: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' | 'center'
+    fontSize: number
+    color: string
+    opacity: number
+    logoUrl?: string
+  }
+  textOverlay: {
+    enabled: boolean
+    title: string
+    subtitle: string
+    showTimestamp: boolean
+    showEventCounter: boolean
+    position: 'top' | 'bottom'
+    backgroundColor: string
+    textColor: string
+    opacity: number
+  }
 }
 
 interface Frame {
@@ -75,6 +98,25 @@ export function CursorVisualizationExporter() {
     cursorColor: '#64d2ff',
     trailLength: 20,
     playbackSpeed: 1,
+    watermark: {
+      enabled: false,
+      text: 'Made with DashboardVibeCoder',
+      position: 'bottom-right',
+      fontSize: 16,
+      color: '#ffffff',
+      opacity: 0.7,
+    },
+    textOverlay: {
+      enabled: false,
+      title: '',
+      subtitle: '',
+      showTimestamp: true,
+      showEventCounter: true,
+      position: 'bottom',
+      backgroundColor: '#000000',
+      textColor: '#ffffff',
+      opacity: 0.8,
+    },
   })
 
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -206,6 +248,118 @@ export function CursorVisualizationExporter() {
     ctx.restore()
   }
 
+  const drawWatermark = (
+    ctx: CanvasRenderingContext2D,
+    canvas: HTMLCanvasElement
+  ) => {
+    if (!settings.watermark.enabled) return
+
+    ctx.save()
+    ctx.globalAlpha = settings.watermark.opacity
+
+    const padding = 20
+    const fontSize = settings.watermark.fontSize
+    ctx.font = `${fontSize}px 'Space Grotesk', sans-serif`
+    ctx.fillStyle = settings.watermark.color
+
+    const textMetrics = ctx.measureText(settings.watermark.text)
+    const textWidth = textMetrics.width
+    const textHeight = fontSize
+
+    let x = padding
+    let y = padding + textHeight
+
+    switch (settings.watermark.position) {
+      case 'top-left':
+        x = padding
+        y = padding + textHeight
+        break
+      case 'top-right':
+        x = canvas.width - textWidth - padding
+        y = padding + textHeight
+        break
+      case 'bottom-left':
+        x = padding
+        y = canvas.height - padding
+        break
+      case 'bottom-right':
+        x = canvas.width - textWidth - padding
+        y = canvas.height - padding
+        break
+      case 'center':
+        x = (canvas.width - textWidth) / 2
+        y = canvas.height / 2
+        break
+    }
+
+    ctx.shadowColor = 'rgba(0, 0, 0, 0.5)'
+    ctx.shadowBlur = 4
+    ctx.shadowOffsetX = 2
+    ctx.shadowOffsetY = 2
+    
+    ctx.fillText(settings.watermark.text, x, y)
+    
+    ctx.restore()
+  }
+
+  const drawTextOverlay = (
+    ctx: CanvasRenderingContext2D,
+    canvas: HTMLCanvasElement,
+    currentTime: number,
+    totalDuration: number,
+    eventCount: number
+  ) => {
+    if (!settings.textOverlay.enabled) return
+
+    ctx.save()
+
+    const padding = 20
+    const lineHeight = 30
+    const barHeight = settings.textOverlay.title || settings.textOverlay.subtitle ? 100 : 60
+    const yPosition = settings.textOverlay.position === 'top' ? 0 : canvas.height - barHeight
+
+    ctx.globalAlpha = settings.textOverlay.opacity
+    ctx.fillStyle = settings.textOverlay.backgroundColor
+    ctx.fillRect(0, yPosition, canvas.width, barHeight)
+
+    ctx.globalAlpha = 1
+    ctx.fillStyle = settings.textOverlay.textColor
+
+    let currentY = yPosition + padding
+
+    if (settings.textOverlay.title) {
+      ctx.font = 'bold 24px "Space Grotesk", sans-serif'
+      ctx.fillText(settings.textOverlay.title, padding, currentY)
+      currentY += lineHeight
+    }
+
+    if (settings.textOverlay.subtitle) {
+      ctx.font = '16px "Space Grotesk", sans-serif'
+      ctx.fillText(settings.textOverlay.subtitle, padding, currentY)
+      currentY += lineHeight - 5
+    }
+
+    const infoText: string[] = []
+    
+    if (settings.textOverlay.showTimestamp) {
+      const current = (currentTime / 1000).toFixed(1)
+      const total = (totalDuration / 1000).toFixed(1)
+      infoText.push(`⏱ ${current}s / ${total}s`)
+    }
+
+    if (settings.textOverlay.showEventCounter) {
+      infoText.push(`🖱 ${eventCount} events`)
+    }
+
+    if (infoText.length > 0) {
+      ctx.font = '14px "JetBrains Mono", monospace'
+      const infoString = infoText.join('  •  ')
+      ctx.fillText(infoString, padding, currentY)
+    }
+
+    ctx.restore()
+  }
+
   const generatePreview = async () => {
     if (!selectedRecording || !previewCanvasRef.current) return
 
@@ -245,6 +399,12 @@ export function CursorVisualizationExporter() {
 
       drawCursor(ctx, mouseEvent.data.x, mouseEvent.data.y, settings.cursorSize, settings.cursorColor)
     }
+
+    const midTime = selectedRecording.duration / 2
+    const midEventCount = Math.floor(selectedRecording.events.length / 2)
+    
+    drawTextOverlay(ctx, canvas, midTime, selectedRecording.duration, midEventCount)
+    drawWatermark(ctx, canvas)
 
     const dataUrl = canvas.toDataURL('image/png')
     setPreviewUrl(dataUrl)
@@ -434,6 +594,9 @@ export function CursorVisualizationExporter() {
           }
         }
 
+        drawTextOverlay(ctx, canvas, currentTime, recording.duration, currentEventIndex)
+        drawWatermark(ctx, canvas)
+
         if (captureFrames) {
           framesRef.current.push({
             imageData: ctx.getImageData(0, 0, canvas.width, canvas.height),
@@ -580,8 +743,9 @@ export function CursorVisualizationExporter() {
 
             <TabsContent value="settings" className="space-y-4 mt-4">
               {selectedRecording && (
-                <>
-                  <div className="space-y-2">
+                <ScrollArea className="h-[600px] pr-4">
+                  <div className="space-y-4">
+                    <div className="space-y-2">
                     <Label>Output Format</Label>
                     <Select
                       value={settings.format}
@@ -776,6 +940,284 @@ export function CursorVisualizationExporter() {
                     </div>
                   </div>
 
+                  <div className="border-t border-border pt-4 mt-4">
+                    <div className="flex items-center justify-between mb-3">
+                      <Label className="flex items-center gap-2">
+                        <Stamp size={18} weight="duotone" className="text-accent" />
+                        Watermark
+                      </Label>
+                      <Switch
+                        id="watermark-enabled"
+                        checked={settings.watermark.enabled}
+                        onCheckedChange={(checked) => 
+                          setSettings(prev => ({
+                            ...prev,
+                            watermark: { ...prev.watermark, enabled: checked }
+                          }))
+                        }
+                      />
+                    </div>
+
+                    {settings.watermark.enabled && (
+                      <div className="space-y-3 pl-6 border-l-2 border-accent/30">
+                        <div className="space-y-2">
+                          <Label>Watermark Text</Label>
+                          <Input
+                            value={settings.watermark.text}
+                            onChange={(e) => 
+                              setSettings(prev => ({
+                                ...prev,
+                                watermark: { ...prev.watermark, text: e.target.value }
+                              }))
+                            }
+                            placeholder="Your watermark text"
+                          />
+                        </div>
+
+                        <div className="space-y-2">
+                          <Label>Position</Label>
+                          <Select
+                            value={settings.watermark.position}
+                            onValueChange={(value) => 
+                              setSettings(prev => ({
+                                ...prev,
+                                watermark: { ...prev.watermark, position: value as any }
+                              }))
+                            }
+                          >
+                            <SelectTrigger>
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="top-left">Top Left</SelectItem>
+                              <SelectItem value="top-right">Top Right</SelectItem>
+                              <SelectItem value="bottom-left">Bottom Left</SelectItem>
+                              <SelectItem value="bottom-right">Bottom Right</SelectItem>
+                              <SelectItem value="center">Center</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-3">
+                          <div className="space-y-2">
+                            <Label>Font Size</Label>
+                            <Input
+                              type="number"
+                              value={settings.watermark.fontSize}
+                              onChange={(e) => 
+                                setSettings(prev => ({
+                                  ...prev,
+                                  watermark: { ...prev.watermark, fontSize: Number(e.target.value) }
+                                }))
+                              }
+                              min={10}
+                              max={48}
+                            />
+                          </div>
+
+                          <div className="space-y-2">
+                            <Label>Opacity</Label>
+                            <Input
+                              type="number"
+                              value={settings.watermark.opacity}
+                              onChange={(e) => 
+                                setSettings(prev => ({
+                                  ...prev,
+                                  watermark: { ...prev.watermark, opacity: Number(e.target.value) }
+                                }))
+                              }
+                              min={0}
+                              max={1}
+                              step={0.1}
+                            />
+                          </div>
+                        </div>
+
+                        <div className="space-y-2">
+                          <Label>Color</Label>
+                          <div className="flex gap-2">
+                            <Input
+                              type="color"
+                              value={settings.watermark.color}
+                              onChange={(e) => 
+                                setSettings(prev => ({
+                                  ...prev,
+                                  watermark: { ...prev.watermark, color: e.target.value }
+                                }))
+                              }
+                              className="w-20 h-10"
+                            />
+                            <Input
+                              type="text"
+                              value={settings.watermark.color}
+                              onChange={(e) => 
+                                setSettings(prev => ({
+                                  ...prev,
+                                  watermark: { ...prev.watermark, color: e.target.value }
+                                }))
+                              }
+                              placeholder="#ffffff"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="border-t border-border pt-4">
+                    <div className="flex items-center justify-between mb-3">
+                      <Label className="flex items-center gap-2">
+                        <Textbox size={18} weight="duotone" className="text-secondary" />
+                        Text Overlay
+                      </Label>
+                      <Switch
+                        id="overlay-enabled"
+                        checked={settings.textOverlay.enabled}
+                        onCheckedChange={(checked) => 
+                          setSettings(prev => ({
+                            ...prev,
+                            textOverlay: { ...prev.textOverlay, enabled: checked }
+                          }))
+                        }
+                      />
+                    </div>
+
+                    {settings.textOverlay.enabled && (
+                      <div className="space-y-3 pl-6 border-l-2 border-secondary/30">
+                        <div className="space-y-2">
+                          <Label>Title</Label>
+                          <Input
+                            value={settings.textOverlay.title}
+                            onChange={(e) => 
+                              setSettings(prev => ({
+                                ...prev,
+                                textOverlay: { ...prev.textOverlay, title: e.target.value }
+                              }))
+                            }
+                            placeholder="Video title"
+                          />
+                        </div>
+
+                        <div className="space-y-2">
+                          <Label>Subtitle</Label>
+                          <Input
+                            value={settings.textOverlay.subtitle}
+                            onChange={(e) => 
+                              setSettings(prev => ({
+                                ...prev,
+                                textOverlay: { ...prev.textOverlay, subtitle: e.target.value }
+                              }))
+                            }
+                            placeholder="Video subtitle"
+                          />
+                        </div>
+
+                        <div className="space-y-2">
+                          <Label>Position</Label>
+                          <Select
+                            value={settings.textOverlay.position}
+                            onValueChange={(value) => 
+                              setSettings(prev => ({
+                                ...prev,
+                                textOverlay: { ...prev.textOverlay, position: value as 'top' | 'bottom' }
+                              }))
+                            }
+                          >
+                            <SelectTrigger>
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="top">Top</SelectItem>
+                              <SelectItem value="bottom">Bottom</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-3">
+                          <div className="flex items-center justify-between space-x-2">
+                            <Label htmlFor="show-timestamp">Timestamp</Label>
+                            <Switch
+                              id="show-timestamp"
+                              checked={settings.textOverlay.showTimestamp}
+                              onCheckedChange={(checked) => 
+                                setSettings(prev => ({
+                                  ...prev,
+                                  textOverlay: { ...prev.textOverlay, showTimestamp: checked }
+                                }))
+                              }
+                            />
+                          </div>
+                          <div className="flex items-center justify-between space-x-2">
+                            <Label htmlFor="show-events">Event Count</Label>
+                            <Switch
+                              id="show-events"
+                              checked={settings.textOverlay.showEventCounter}
+                              onCheckedChange={(checked) => 
+                                setSettings(prev => ({
+                                  ...prev,
+                                  textOverlay: { ...prev.textOverlay, showEventCounter: checked }
+                                }))
+                              }
+                            />
+                          </div>
+                        </div>
+
+                        <div className="space-y-2">
+                          <Label>Opacity</Label>
+                          <Input
+                            type="number"
+                            value={settings.textOverlay.opacity}
+                            onChange={(e) => 
+                              setSettings(prev => ({
+                                ...prev,
+                                textOverlay: { ...prev.textOverlay, opacity: Number(e.target.value) }
+                              }))
+                            }
+                            min={0}
+                            max={1}
+                            step={0.1}
+                          />
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-3">
+                          <div className="space-y-2">
+                            <Label>BG Color</Label>
+                            <div className="flex gap-2">
+                              <Input
+                                type="color"
+                                value={settings.textOverlay.backgroundColor}
+                                onChange={(e) => 
+                                  setSettings(prev => ({
+                                    ...prev,
+                                    textOverlay: { ...prev.textOverlay, backgroundColor: e.target.value }
+                                  }))
+                                }
+                                className="w-full h-10"
+                              />
+                            </div>
+                          </div>
+
+                          <div className="space-y-2">
+                            <Label>Text Color</Label>
+                            <div className="flex gap-2">
+                              <Input
+                                type="color"
+                                value={settings.textOverlay.textColor}
+                                onChange={(e) => 
+                                  setSettings(prev => ({
+                                    ...prev,
+                                    textOverlay: { ...prev.textOverlay, textColor: e.target.value }
+                                  }))
+                                }
+                                className="w-full h-10"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
                   <Button
                     className="w-full"
                     variant="outline"
@@ -791,7 +1233,8 @@ export function CursorVisualizationExporter() {
                       <p className="text-xs text-center text-muted-foreground mt-2">Preview Frame</p>
                     </div>
                   )}
-                </>
+                  </div>
+                </ScrollArea>
               )}
             </TabsContent>
 
