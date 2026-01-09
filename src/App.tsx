@@ -18,6 +18,8 @@ import { socialMediaDashboard } from '@/lib/social-media-template'
 import { businessIntelligenceDashboard } from '@/lib/business-intelligence-template'
 import { DashboardPreview } from '@/components/DashboardPreview'
 import { DrillDownGuide } from '@/components/DrillDownGuide'
+import { DataConnectorManager } from '@/components/DataConnectorManager'
+import { ConnectorDrillDownDemo } from '@/components/ConnectorDrillDownDemo'
 import { toast } from 'sonner'
 import { motion, AnimatePresence } from 'framer-motion'
 
@@ -311,6 +313,10 @@ function App() {
             )}
 
             <DrillDownGuide />
+
+            <ConnectorDrillDownDemo />
+
+            <DataConnectorManager />
 
             <Card>
               <CardHeader>

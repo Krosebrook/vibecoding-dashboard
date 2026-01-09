@@ -76,11 +76,18 @@ This is a meta-application that generates other applications dynamically. It req
 - **Success criteria**: All charts render smoothly at 60fps, interactions feel immediate, tooltips are informative, and charts adapt to container size responsively
 
 ### Drill-Down Data Exploration
-- **Functionality**: Click any data point, bar, pie segment, or chart area to drill down into detailed breakdowns and sub-levels of data with breadcrumb navigation and table view options at each level
-- **Purpose**: Enable deep data exploration without leaving the dashboard, allowing users to investigate trends and outliers by clicking through hierarchical data layers
-- **Trigger**: User clicks on any interactive chart element (data point in line/area charts, bar in bar charts, segment in pie charts)
-- **Progression**: User clicks chart element → Drill-down data generates → Chart updates with detailed breakdown → Breadcrumb appears showing navigation path → User can drill further, view as table, or navigate back → Context preserved throughout exploration
-- **Success criteria**: Drill-down transitions feel instant (<200ms), breadcrumb navigation is intuitive, table views display complete data, and users can easily return to overview level
+- **Functionality**: Click any data point, bar, pie segment, or chart area to drill down into detailed breakdowns and sub-levels of data with breadcrumb navigation and table view options at each level. Includes custom data connectors for fetching real data from APIs with automatic caching, rate limiting, and error handling.
+- **Purpose**: Enable deep data exploration without leaving the dashboard, allowing users to investigate trends and outliers by clicking through hierarchical data layers. Custom data connectors allow dashboards to display real, live data from any API source.
+- **Trigger**: User clicks on any interactive chart element (data point in line/area charts, bar in bar charts, segment in pie charts). Data connectors execute automatically when charts load or can be triggered manually for testing.
+- **Progression**: User clicks chart element → Drill-down data fetches from API connector → Chart updates with detailed breakdown → Breadcrumb appears showing navigation path → User can drill further, view as table, or navigate back → Context preserved throughout exploration. For connectors: User selects pre-configured API → Tests connection → Data fetches and caches → Chart visualizes data → User can create custom connectors with their own API endpoints.
+- **Success criteria**: Drill-down transitions feel instant (<200ms), breadcrumb navigation is intuitive, table views display complete data, users can easily return to overview level, API requests are cached efficiently, rate limits are respected, and custom connectors can be created without coding.
+
+### Real-Time Data Connectors
+- **Functionality**: Comprehensive system for connecting to real APIs and data sources including 7+ pre-configured public APIs (JSONPlaceholder, GitHub, Coinbase, Cat Facts, Open Brewery, Exchange Rates), custom connector builder with visual configuration, automatic caching and refresh intervals, rate limiting, multiple auth types (Bearer, API Key, Basic), request/response transformation, and drill-down integration for hierarchical data fetching
+- **Purpose**: Transform static mock dashboards into live data applications that display real information from any API source, enabling production-ready dashboards that stay current automatically
+- **Trigger**: User selects connector from library, tests connection, or creates custom connector through visual builder
+- **Progression**: User browses connector library → Selects pre-configured connector or creates custom → Configures URL, auth, params → Tests connection → Views live data in chart/table → Data auto-refreshes based on interval → Can drill down to fetch related data → Cache manages performance → Custom connectors persist for reuse
+- **Success criteria**: Pre-configured connectors work out-of-box, custom connectors can be created in under 2 minutes, caching reduces redundant requests by 80%+, rate limiting prevents API abuse, authentication works for all common types, data transforms correctly, drill-down fetches related data seamlessly, and errors provide actionable feedback
 
 ## Edge Case Handling
 
@@ -95,6 +102,11 @@ This is a meta-application that generates other applications dynamically. It req
 - **Deep Drill-Down Levels**: System limits drill-down depth to prevent infinite recursion and provides clear indicators when maximum depth reached
 - **Missing Drill-Down Data**: When no detailed data exists, system generates realistic placeholder data maintaining data relationships
 - **Drill-Down State Loss**: Breadcrumb navigation preserves full drill-down path allowing users to jump to any previous level
+- **API Request Failures**: Connectors implement retry logic, show clear error messages, and cache last successful response as fallback
+- **Rate Limiting**: Built-in rate limit tracking prevents exceeding API quotas and queues requests when approaching limits
+- **Authentication Errors**: System validates credentials before first request and provides clear instructions for obtaining API keys
+- **CORS Issues**: Public API connectors are pre-tested for browser compatibility; custom connectors warn about potential CORS restrictions
+- **Stale Data**: Visual indicators show data age and last refresh time; manual refresh always available
 
 ## Design Direction
 
