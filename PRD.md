@@ -103,6 +103,13 @@ This is a meta-application that generates other applications dynamically. It req
 - **Progression**: User opens transform wizard → Selects webhook → Pastes sample payload → Adds field mappings (source path → target field) → Chooses transform type (direct/function/computed/conditional) → Writes custom functions if needed or uses pattern library → Tests transform with sample data → Views generated code → Saves transform → Transform automatically applies to all webhook events
 - **Success criteria**: Transform wizard is intuitive for non-technical users, auto-suggest creates 80%+ of mappings correctly, pattern library covers common scenarios, test environment catches errors before deployment, transforms execute <50ms per event, visual flow diagram aids understanding, and generated code is production-ready
 
+### AI-Powered Transform Generation
+- **Functionality**: Natural language description system that generates complete webhook payload transformations using AI including intelligent field mapping, type conversion detection, computation logic, conditional filtering, nested structure handling, and default value suggestions with explanations and improvement recommendations
+- **Purpose**: Eliminate the technical complexity of creating data transformations by letting users describe what they want in plain English, making webhook integration accessible to non-developers while maintaining power user flexibility
+- **Trigger**: User opens transform wizard, navigates to "AI Generate" tab, enters natural language description of desired transformation
+- **Progression**: User describes transformation in plain language (e.g. "Extract user email, name, and registration date. Convert timestamp to ISO format.") → AI analyzes description and sample payload → Generates complete transform configuration with mappings, functions, and types → Displays explanation of what transform does → Shows suggestions for improvements → User reviews generated mappings → User clicks "Use This Transform" → Transform loads into wizard for final review/testing → User saves transform
+- **Success criteria**: 90%+ of common transformations generate correctly on first try, AI explanations are clear and accurate, generated JavaScript functions are syntactically correct and execute without errors, suggestions provide genuine value, users can create transforms 5x faster than manual configuration, and transforms handle edge cases (missing fields, type mismatches) gracefully
+
 ## Edge Case Handling
 
 - **Ambiguous Prompts**: System asks clarifying questions before generating, suggests multiple interpretations
@@ -130,6 +137,11 @@ This is a meta-application that generates other applications dynamically. It req
 - **Missing Source Fields**: Default values configured per mapping handle missing data gracefully without breaking transforms
 - **Complex Nested Structures**: Dot notation and array indexing support deep path traversal in payload structures
 - **Type Mismatches**: Transform functions include type validation preventing common type errors (string operations on numbers, etc.)
+- **Vague AI Transform Descriptions**: When description is too vague, AI uses sample payload to infer intent and provides explanation of assumptions made
+- **AI Generation Failures**: System retries once automatically, then suggests user provide more detail or use manual mapping as fallback
+- **Invalid JavaScript in Generated Functions**: Generated code is syntax-checked before presentation; if invalid, regenerates with stricter validation
+- **Conflicting Transform Logic**: AI identifies logical conflicts (e.g., filtering and mapping same field differently) and warns user in suggestions
+- **No Sample Payload Available**: AI generates transforms based purely on description with generic field types and includes note about testing with real data
 
 ## Design Direction
 
