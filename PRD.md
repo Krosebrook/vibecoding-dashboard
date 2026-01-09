@@ -1,0 +1,164 @@
+# Planning Guide
+
+A universal dashboard generator that transforms natural language descriptions into production-ready, fully functional dashboards of any type, style, or complexity through AI-powered "vibecoding."
+
+**Experience Qualities**: 
+1. **Magical** - The transformation from idea to reality should feel effortless and delightful, like the system reads your mind
+2. **Empowering** - Users should feel capable of creating sophisticated dashboards regardless of technical skill
+3. **Professional** - Generated dashboards should look and feel production-ready, never prototypical or incomplete
+
+**Complexity Level**: Complex Application (advanced functionality, likely with multiple views)
+This is a meta-application that generates other applications dynamically. It requires sophisticated AI integration, state management for generated dashboards, real-time preview, component generation, data modeling, and persistence of both the generator state and generated dashboard configurations.
+
+## Essential Features
+
+### AI-Powered Dashboard Generation
+- **Functionality**: Accepts natural language descriptions and generates complete dashboard configurations including layout, components, data models, styling, and interactivity
+- **Purpose**: Eliminates the technical barrier between imagination and implementation
+- **Trigger**: User enters description in main prompt input and clicks generate
+- **Progression**: User types description → Clicks generate → AI analyzes requirements → System generates dashboard config → Preview renders → User can refine or deploy
+- **Success criteria**: Dashboard matches user intent, is fully functional, and requires minimal iteration
+
+### Multi-Style Dashboard Templates
+- **Functionality**: Pre-configured starting points for common dashboard types (analytics, CRM, project management, monitoring, social, e-commerce, etc.)
+- **Purpose**: Accelerates creation with intelligent defaults while remaining fully customizable
+- **Trigger**: User selects template from gallery or specifies type in prompt
+- **Progression**: User browses templates → Selects template → Describes customizations → AI adapts template → Dashboard generates
+- **Success criteria**: Templates cover 80% of common use cases and serve as good starting points
+
+### Real-Time Preview & Editing
+- **Functionality**: Live preview of generated dashboard with ability to make natural language edits
+- **Purpose**: Enables rapid iteration without regenerating from scratch
+- **Trigger**: Dashboard generates or user requests modification
+- **Progression**: Dashboard displays → User identifies change → User describes change → AI updates specific elements → Preview updates instantly
+- **Success criteria**: Changes apply within 2 seconds and maintain dashboard integrity
+
+### Component Library Integration
+- **Functionality**: AI intelligently selects and configures components from available UI library (charts, tables, cards, forms, etc.)
+- **Purpose**: Ensures visual consistency and production quality
+- **Trigger**: Automatic during generation based on requirements
+- **Progression**: AI analyzes needs → Selects appropriate components → Configures props and styling → Composes layout → Renders result
+- **Success criteria**: Components are contextually appropriate and properly configured
+
+### Data Model Generation
+- **Functionality**: Creates realistic seed data and data structures matching dashboard requirements
+- **Purpose**: Makes dashboards immediately functional and testable
+- **Trigger**: Automatic during dashboard generation
+- **Progression**: AI determines data requirements → Generates schema → Creates seed data → Connects to components → Enables interactivity
+- **Success criteria**: Data is realistic, sufficient for testing, and properly typed
+
+### Export & Persistence
+- **Functionality**: Saves generated dashboard configurations and allows switching between multiple dashboards
+- **Purpose**: Enables users to maintain a library of created dashboards
+- **Trigger**: User saves dashboard or navigates between saved dashboards
+- **Progression**: User clicks save → System persists config → Dashboard added to library → User can switch between dashboards anytime
+- **Success criteria**: All dashboard state persists across sessions
+
+### Setup Instructions Generator
+- **Functionality**: Automatically generates comprehensive setup documentation for each dashboard
+- **Purpose**: Makes dashboards production-ready and shareable
+- **Trigger**: Dashboard generation completes
+- **Progression**: Dashboard created → System analyzes structure → Generates setup docs → User can view/copy instructions
+- **Success criteria**: Instructions are complete, accurate, and enable someone else to use/modify the dashboard
+
+## Edge Case Handling
+
+- **Ambiguous Prompts**: System asks clarifying questions before generating, suggests multiple interpretations
+- **Conflicting Requirements**: AI identifies conflicts and proposes compromise solutions
+- **Unsupported Features**: Gracefully explains limitations and suggests closest alternatives
+- **Data Persistence Errors**: Implements retry logic with user feedback and fallback to cached state
+- **Generation Failures**: Provides detailed error context and offers to regenerate with modified parameters
+- **Mobile Responsiveness**: All generated dashboards automatically include responsive layouts
+- **Empty States**: Generated dashboards include thoughtful empty states for all data scenarios
+- **Performance Issues**: Large dashboards lazy-load components and implement virtualization where needed
+
+## Design Direction
+
+The interface should feel like a sophisticated AI design studio - sleek, futuristic, and precision-engineered. The design should evoke confidence, intelligence, and creative possibility. Users should feel they're working with cutting-edge technology that "gets it" intuitively.
+
+## Color Selection
+
+Deep, rich technological aesthetic with vibrant accent highlighting AI intelligence.
+
+- **Primary Color**: Deep electric blue `oklch(0.45 0.19 250)` - Represents AI intelligence, trust, and technological sophistication
+- **Secondary Colors**: 
+  - Dark slate background `oklch(0.15 0.01 260)` for depth and focus
+  - Soft purple `oklch(0.50 0.15 290)` for secondary actions and supporting elements
+  - Neutral gray `oklch(0.30 0.01 260)` for cards and surfaces
+- **Accent Color**: Vibrant cyan `oklch(0.75 0.15 195)` - Attention-grabbing highlight for generation actions, AI activity indicators, and success states
+- **Foreground/Background Pairings**: 
+  - Primary Blue: White text `oklch(0.98 0 0)` - Ratio 8.2:1 ✓
+  - Background Dark Slate `oklch(0.15 0.01 260)`: Light gray text `oklch(0.85 0.01 260)` - Ratio 11.5:1 ✓
+  - Accent Cyan `oklch(0.75 0.15 195)`: Dark slate text `oklch(0.15 0.01 260)` - Ratio 8.9:1 ✓
+  - Card Surface `oklch(0.30 0.01 260)`: White text `oklch(0.98 0 0)` - Ratio 6.1:1 ✓
+
+## Font Selection
+
+Typography should feel technical yet approachable, combining geometric precision with excellent readability.
+
+**Primary Font**: Space Grotesk - Modern geometric sans-serif that balances technical precision with warmth, perfect for a design tool interface
+**Secondary Font**: JetBrains Mono - For code snippets, data display, and setup instructions
+
+- **Typographic Hierarchy**: 
+  - H1 (Main Title): Space Grotesk Bold / 32px / -0.02em letter spacing / line-height 1.2
+  - H2 (Section Headers): Space Grotesk SemiBold / 24px / -0.01em / line-height 1.3
+  - H3 (Card Headers): Space Grotesk Medium / 18px / 0em / line-height 1.4
+  - Body (UI Text): Space Grotesk Regular / 15px / 0em / line-height 1.6
+  - Small (Metadata): Space Grotesk Regular / 13px / 0em / line-height 1.5
+  - Code (Instructions): JetBrains Mono Regular / 14px / 0em / line-height 1.7
+
+## Animations
+
+Animations should emphasize the AI's "thinking" and creation process, making the generation feel magical. Use smooth, purposeful motion that guides attention to transformations. Generation sequences should include loading states that feel intelligent rather than generic. Micro-interactions on buttons and inputs should feel responsive and premium. Dashboard transitions should be smooth but quick (250-300ms). Success states should celebrate with subtle particle effects or color shifts. Real-time edits should morph smoothly rather than snap.
+
+## Component Selection
+
+- **Components**: 
+  - Textarea for main prompt input with AI-enhanced styling
+  - Button (primary variant) for generation with loading states
+  - Card for dashboard preview containers and template gallery
+  - Tabs for switching between preview/code/setup views
+  - Select for template chooser
+  - Dialog for detailed setup instructions
+  - Accordion for organizing generated dashboard sections
+  - Badge for dashboard type indicators
+  - ScrollArea for long content areas
+  - Separator for visual section breaks
+  - Skeleton for loading states during generation
+  
+- **Customizations**: 
+  - Custom AI prompt input with gradient border that pulses during generation
+  - Custom dashboard preview frame with zoom/pan controls
+  - Custom template card with hover effects showing preview
+  - Custom generation progress indicator with stage labels
+  - Custom code syntax highlighting for setup instructions
+  
+- **States**: 
+  - Generate button: rest (cyan gradient), hover (brighter + lift), active (compressed), generating (animated shimmer), success (checkmark morph)
+  - Prompt input: rest (subtle border), focus (cyan glow + border thicken), generating (disabled + pulsing)
+  - Dashboard cards: rest (static), hover (lift + border glow), selected (cyan border + shadow)
+  
+- **Icon Selection**: 
+  - Sparkles for AI/generation actions
+  - Layout for dashboard/template icons
+  - Code for setup instructions view
+  - Eye for preview mode
+  - Download for export actions
+  - Plus for create new
+  - CaretRight for template navigation
+  - Check for completion states
+  
+- **Spacing**: 
+  - Container padding: p-6 on desktop, p-4 on mobile
+  - Card gaps: gap-6 for main layout, gap-4 for card grids
+  - Section spacing: space-y-8 for major sections, space-y-4 within cards
+  - Button padding: px-6 py-3 for primary, px-4 py-2 for secondary
+  
+- **Mobile**: 
+  - Stack layout vertically on mobile (flex-col)
+  - Full-width prompt input and buttons
+  - Template gallery switches to single column
+  - Preview area becomes scrollable full-width
+  - Tabs become horizontal scrolling on narrow screens
+  - Reduce padding to p-4 globally
+  - Font sizes reduce by 1-2px at mobile breakpoint
