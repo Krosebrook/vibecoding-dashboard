@@ -37,6 +37,8 @@ import { CursorVisualizationExporter } from '@/components/CursorVisualizationExp
 import { TextAnimationCurveExplorer } from '@/components/TextAnimationCurveExplorer'
 import { TextAnimationShowcase } from '@/components/TextAnimationShowcase'
 import { PhysicsTextEngine } from '@/components/PhysicsTextEngine'
+import { ParticleEmitterCanvas } from '@/components/ParticleEmitterCanvas'
+import { MultiEmitterCanvas } from '@/components/MultiEmitterCanvas'
 import { toast } from 'sonner'
 import { motion, AnimatePresence } from 'framer-motion'
 
@@ -259,6 +261,8 @@ function App() {
         <VisualPatternBuilder />
       ) : viewMode === 'animation' ? (
         <div className="container mx-auto px-6 py-8 space-y-6">
+          <ParticleEmitterCanvas />
+          <MultiEmitterCanvas />
           <PhysicsTextEngine />
           <TextAnimationCurveExplorer />
           <TextAnimationShowcase />
