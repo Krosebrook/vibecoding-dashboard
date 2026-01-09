@@ -24,6 +24,7 @@ import { WebhookManager } from '@/components/WebhookManager'
 import { WebhookQuickStart } from '@/components/WebhookQuickStart'
 import { WebhookTransformManager } from '@/components/WebhookTransformManager'
 import { TransformPatternLibrary } from '@/components/TransformPatternLibrary'
+import { AITransformQuickStart } from '@/components/AITransformQuickStart'
 import { toast } from 'sonner'
 import { motion, AnimatePresence } from 'framer-motion'
 
@@ -321,6 +322,8 @@ function App() {
             <ConnectorDrillDownDemo />
 
             <WebhookQuickStart />
+
+            <AITransformQuickStart />
 
             <WebhookManager />
 

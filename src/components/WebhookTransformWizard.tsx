@@ -22,8 +22,10 @@ import {
   Function as FunctionIcon,
   Lightbulb,
   Copy,
-  Eye
+  Eye,
+  Sparkle
 } from '@phosphor-icons/react'
+import { AITransformGenerator } from '@/components/AITransformGenerator'
 import { toast } from 'sonner'
 import { motion, AnimatePresence } from 'framer-motion'
 
@@ -317,6 +319,11 @@ ${transform.mappings.map(m => {
     return code
   }
 
+  const handleAIGeneratedTransform = (aiTransform: PayloadTransform) => {
+    setTransform(aiTransform)
+    toast.success('AI-generated transform loaded!')
+  }
+
   return (
     <Card>
       <CardHeader>
@@ -329,12 +336,31 @@ ${transform.mappings.map(m => {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <Tabs defaultValue="mappings" className="space-y-4">
-          <TabsList>
+        <Tabs defaultValue="ai" className="space-y-4">
+          <TabsList className="grid w-full grid-cols-4">
+            <TabsTrigger value="ai" className="gap-2">
+              <Sparkle size={14} weight="fill" />
+              AI Generate
+            </TabsTrigger>
             <TabsTrigger value="mappings">Mappings</TabsTrigger>
             <TabsTrigger value="test">Test</TabsTrigger>
             <TabsTrigger value="code">Code</TabsTrigger>
           </TabsList>
+
+          <TabsContent value="ai" className="space-y-4">
+            <AITransformGenerator
+              webhookId={webhookId}
+              samplePayload={samplePayload}
+              onTransformGenerated={handleAIGeneratedTransform}
+            />
+            
+            <Alert>
+              <Lightbulb size={16} weight="fill" className="text-accent" />
+              <AlertDescription>
+                Describe what you want to transform in natural language, and AI will generate the complete mapping configuration for you. You can then review and modify it in the Mappings tab.
+              </AlertDescription>
+            </Alert>
+          </TabsContent>
 
           <TabsContent value="mappings" className="space-y-4">
             <div className="grid gap-4">

@@ -71,8 +71,7 @@ Return a JSON object with this exact structure:
 
 User prompt: ${prompt}`
 
-  const aiPrompt = spark.llmPrompt`${systemPrompt}`
-  const response = await spark.llm(aiPrompt, 'gpt-4o', true)
+  const response = await window.spark.llm(systemPrompt, 'gpt-4o', true)
   
   const config = JSON.parse(response)
   
@@ -106,8 +105,7 @@ User's refinement request: ${refinementPrompt}
 
 Analyze the request and update the configuration accordingly. Return the complete updated configuration in the same JSON format.`
 
-  const aiPrompt = spark.llmPrompt`${systemPrompt}`
-  const response = await spark.llm(aiPrompt, 'gpt-4o', true)
+  const response = await window.spark.llm(systemPrompt, 'gpt-4o', true)
   
   onProgress?.({ stage: 'complete', progress: 100, message: 'Refinement complete!' })
   
