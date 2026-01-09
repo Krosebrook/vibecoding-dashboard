@@ -7,7 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Badge } from '@/components/ui/badge'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import { Sparkle, Layout, Code, Eye, Plus, Download, Check, Warning, Monitor, ChartLine, CurrencyDollar, ShareNetwork, ChartBar } from '@phosphor-icons/react'
+import { Sparkle, Layout, Code, Eye, Plus, Download, Check, Warning, Monitor, ChartLine, CurrencyDollar, ShareNetwork, ChartBar, Palette } from '@phosphor-icons/react'
 import { DashboardConfig, GenerationProgress, DashboardTemplate } from '@/lib/types'
 import { generateDashboard, refineDashboard, generateSetupInstructions } from '@/lib/dashboard-generator'
 import { dashboardTemplates } from '@/lib/templates'
@@ -25,10 +25,12 @@ import { WebhookQuickStart } from '@/components/WebhookQuickStart'
 import { WebhookTransformManager } from '@/components/WebhookTransformManager'
 import { TransformPatternLibrary } from '@/components/TransformPatternLibrary'
 import { AITransformQuickStart } from '@/components/AITransformQuickStart'
+import { VisualPatternBuilder } from '@/components/VisualPatternBuilder'
 import { toast } from 'sonner'
 import { motion, AnimatePresence } from 'framer-motion'
 
 function App() {
+  const [viewMode, setViewMode] = useState<'dashboard' | 'pattern'>('dashboard')
   const [prompt, setPrompt] = useState('')
   const [selectedTemplate, setSelectedTemplate] = useState<DashboardTemplate | undefined>()
   const [isGenerating, setIsGenerating] = useState(false)
@@ -167,45 +169,75 @@ function App() {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center">
-                <Sparkle size={24} weight="fill" className="text-primary-foreground" />
+                {viewMode === 'dashboard' ? (
+                  <Sparkle size={24} weight="fill" className="text-primary-foreground" />
+                ) : (
+                  <Palette size={24} weight="fill" className="text-primary-foreground" />
+                )}
               </div>
               <div>
-                <h1 className="text-2xl font-bold tracking-tight">Dashboard VibeCoder</h1>
-                <p className="text-sm text-muted-foreground">AI-Powered Dashboard Generator</p>
+                <h1 className="text-2xl font-bold tracking-tight">
+                  {viewMode === 'dashboard' ? 'Dashboard VibeCoder' : 'Visual Pattern Builder'}
+                </h1>
+                <p className="text-sm text-muted-foreground">
+                  {viewMode === 'dashboard' ? 'AI-Powered Dashboard Generator' : 'Drag-and-drop pattern design system'}
+                </p>
               </div>
             </div>
-            {currentDashboard && (
-              <div className="flex items-center gap-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={handleSave}
-                >
-                  <Download size={16} className="mr-2" />
-                  Save
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={handleExport}
-                >
-                  <Code size={16} className="mr-2" />
-                  Export
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setSetupDialogOpen(true)}
-                >
-                  <Eye size={16} className="mr-2" />
-                  Setup
-                </Button>
-              </div>
-            )}
+            <div className="flex items-center gap-2">
+              <Button
+                variant={viewMode === 'dashboard' ? 'default' : 'outline'}
+                size="sm"
+                onClick={() => setViewMode('dashboard')}
+              >
+                <Sparkle size={16} className="mr-2" />
+                Dashboard
+              </Button>
+              <Button
+                variant={viewMode === 'pattern' ? 'default' : 'outline'}
+                size="sm"
+                onClick={() => setViewMode('pattern')}
+              >
+                <Palette size={16} className="mr-2" />
+                Patterns
+              </Button>
+              {viewMode === 'dashboard' && currentDashboard && (
+                <>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={handleSave}
+                  >
+                    <Download size={16} className="mr-2" />
+                    Save
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={handleExport}
+                  >
+                    <Code size={16} className="mr-2" />
+                    Export
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setSetupDialogOpen(true)}
+                  >
+                    <Eye size={16} className="mr-2" />
+                    Setup
+                  </Button>
+                </>
+              )}
+            </div>
           </div>
         </div>
       </div>
 
+      {viewMode === 'pattern' ? (
+        <VisualPatternBuilder />
+      ) : (
+      <>
       <div className="container mx-auto px-6 py-8">
         <div className="grid lg:grid-cols-3 gap-6">
           <div className="lg:col-span-1 space-y-6">
@@ -634,6 +666,8 @@ function App() {
           </ScrollArea>
         </DialogContent>
       </Dialog>
+      </>
+      )}
     </div>
   )
 }
