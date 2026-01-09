@@ -28,6 +28,55 @@ export type BlendMode =
   | 'difference'
   | 'exclusion'
 
+export type EasingFunction = 
+  | 'linear'
+  | 'ease-in'
+  | 'ease-out'
+  | 'ease-in-out'
+  | 'ease-in-back'
+  | 'ease-out-back'
+  | 'ease-in-out-back'
+  | 'ease-in-elastic'
+  | 'ease-out-elastic'
+  | 'ease-in-out-elastic'
+  | 'ease-in-bounce'
+  | 'ease-out-bounce'
+  | 'ease-in-out-bounce'
+
+export type AnimationType = 
+  | 'move'
+  | 'pulse'
+  | 'rotate'
+  | 'scale'
+  | 'fade'
+  | 'custom'
+
+export interface AnimationKeyframe {
+  id: string
+  time: number
+  x?: number
+  y?: number
+  scale?: number
+  rotation?: number
+  opacity?: number
+  width?: number
+  height?: number
+}
+
+export interface ElementAnimation {
+  id: string
+  elementId: string
+  name: string
+  type: AnimationType
+  duration: number
+  delay: number
+  iterations: number | 'infinite'
+  direction: 'normal' | 'reverse' | 'alternate' | 'alternate-reverse'
+  easing: EasingFunction
+  keyframes: AnimationKeyframe[]
+  enabled: boolean
+}
+
 export interface PatternElement {
   id: string
   type: PatternElementType
@@ -43,6 +92,7 @@ export interface PatternElement {
   zIndex: number
   scale: number
   properties: Record<string, any>
+  animations?: ElementAnimation[]
 }
 
 export interface PatternConfig {

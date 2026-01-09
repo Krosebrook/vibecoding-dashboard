@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useKV } from '@github/spark/hooks'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -12,8 +12,10 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 import { PatternConfig, PatternElement, PatternElementType, HistoryState } from '@/lib/pattern-builder-types'
 import { patternTemplates } from '@/lib/pattern-templates'
 import { PatternCanvas } from '@/components/PatternCanvas'
+import { AnimatedPatternCanvas } from '@/components/AnimatedPatternCanvas'
 import { PatternElementEditor } from '@/components/PatternElementEditor'
-import { Palette, Plus, Download, Upload, Code, ArrowCounterClockwise, ArrowClockwise, Sparkle } from '@phosphor-icons/react'
+import { AnimationTimeline } from '@/components/AnimationTimeline'
+import { Palette, Plus, Download, Upload, Code, ArrowCounterClockwise, ArrowClockwise, Sparkle, Play, Pause } from '@phosphor-icons/react'
 import { toast } from 'sonner'
 import { motion, AnimatePresence } from 'framer-motion'
 
@@ -27,6 +29,37 @@ export function VisualPatternBuilder() {
   const [exportedCSS, setExportedCSS] = useState('')
   const [aiPrompt, setAiPrompt] = useState('')
   const [isGenerating, setIsGenerating] = useState(false)
+  const [isAnimationPlaying, setIsAnimationPlaying] = useState(false)
+  const [animationTime, setAnimationTime] = useState(0)
+
+  useEffect(() => {
+    if (!isAnimationPlaying || !currentPattern) return
+
+    let lastTime = performance.now()
+    let animationFrameId: number
+
+    const animate = (currentTimeStamp: number) => {
+      const delta = currentTimeStamp - lastTime
+      lastTime = currentTimeStamp
+
+      setAnimationTime(prev => {
+        const allAnimations = currentPattern.elements.flatMap(el => el.animations || [])
+        const maxDuration = Math.max(...allAnimations.map(a => a.duration + a.delay), 5000)
+        const next = prev + delta
+        return next >= maxDuration ? 0 : next
+      })
+
+      animationFrameId = requestAnimationFrame(animate)
+    }
+
+    animationFrameId = requestAnimationFrame(animate)
+
+    return () => {
+      if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId)
+      }
+    }
+  }, [isAnimationPlaying, currentPattern])
 
   const addToHistory = (config: PatternConfig) => {
     const newHistory = history.slice(0, historyIndex + 1)
@@ -342,8 +375,9 @@ Return ONLY a valid JSON object with this structure:
   return (
     <>
       <div className="container mx-auto px-6 py-8">
-        <div className="grid lg:grid-cols-4 gap-6">
-          <div className="lg:col-span-1 space-y-6">
+        <div className="space-y-6">
+          <div className="grid lg:grid-cols-4 gap-6">
+            <div className="lg:col-span-1 space-y-6">
             <Card>
               <CardHeader>
                 <CardTitle className="text-lg">AI Pattern Generator</CardTitle>
@@ -507,12 +541,38 @@ Return ONLY a valid JSON object with this structure:
                             className="h-8 w-16 p-1"
                           />
                         </div>
+                        <div className="flex-1" />
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => {
+                            setIsAnimationPlaying(!isAnimationPlaying)
+                            if (isAnimationPlaying) setAnimationTime(0)
+                          }}
+                        >
+                          {isAnimationPlaying ? (
+                            <>
+                              <Pause size={16} className="mr-2" />
+                              Pause
+                            </>
+                          ) : (
+                            <>
+                              <Play size={16} className="mr-2" />
+                              Play
+                            </>
+                          )}
+                        </Button>
                       </div>
                     </div>
                   </CardHeader>
                   <CardContent className="flex-1 flex items-center justify-center overflow-hidden">
                     <div className="border-2 border-dashed border-border rounded-lg p-4 bg-muted/20">
-                      <PatternCanvas config={currentPattern} scale={1} />
+                      <AnimatedPatternCanvas 
+                        config={currentPattern} 
+                        scale={1}
+                        isPlaying={isAnimationPlaying}
+                        currentTime={animationTime}
+                      />
                     </div>
                   </CardContent>
                 </div>
@@ -574,6 +634,20 @@ Return ONLY a valid JSON object with this structure:
             </Card>
           </div>
         </div>
+
+        {currentPattern && currentPattern.elements.length > 0 && (
+          <div className="w-full">
+            <AnimationTimeline 
+              elements={currentPattern.elements}
+              onUpdateElement={updateElement}
+              externalIsPlaying={isAnimationPlaying}
+              externalCurrentTime={animationTime}
+              onPlayStateChange={setIsAnimationPlaying}
+              onTimeChange={setAnimationTime}
+            />
+          </div>
+        )}
+      </div>
       </div>
 
       <Dialog open={exportDialogOpen} onOpenChange={setExportDialogOpen}>
