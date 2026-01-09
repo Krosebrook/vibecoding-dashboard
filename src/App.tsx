@@ -7,11 +7,14 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Badge } from '@/components/ui/badge'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import { Sparkle, Layout, Code, Eye, Plus, Download, Check, Warning, Monitor } from '@phosphor-icons/react'
+import { Sparkle, Layout, Code, Eye, Plus, Download, Check, Warning, Monitor, ChartLine, CurrencyDollar, ShareNetwork } from '@phosphor-icons/react'
 import { DashboardConfig, GenerationProgress, DashboardTemplate } from '@/lib/types'
 import { generateDashboard, refineDashboard, generateSetupInstructions } from '@/lib/dashboard-generator'
 import { dashboardTemplates } from '@/lib/templates'
 import { systemMonitoringDashboard } from '@/lib/monitoring-template'
+import { analyticsDashboard } from '@/lib/analytics-template'
+import { salesDashboard } from '@/lib/sales-template'
+import { socialMediaDashboard } from '@/lib/social-media-template'
 import { DashboardPreview } from '@/components/DashboardPreview'
 import { toast } from 'sonner'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -104,6 +107,21 @@ function App() {
   const handleLoadMonitoringDashboard = () => {
     setCurrentDashboard(systemMonitoringDashboard)
     toast.success('System Monitoring Dashboard loaded!')
+  }
+
+  const handleLoadAnalyticsDashboard = () => {
+    setCurrentDashboard(analyticsDashboard)
+    toast.success('Analytics Dashboard loaded!')
+  }
+
+  const handleLoadSalesDashboard = () => {
+    setCurrentDashboard(salesDashboard)
+    toast.success('Sales Dashboard loaded!')
+  }
+
+  const handleLoadSocialMediaDashboard = () => {
+    setCurrentDashboard(socialMediaDashboard)
+    toast.success('Social Media Dashboard loaded!')
   }
 
   const handleDeleteDashboard = (id: string) => {
@@ -296,41 +314,88 @@ function App() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <ScrollArea className="h-[300px]">
+                <ScrollArea className="h-[400px]">
                   <div className="space-y-3">
-                    <button
-                      className="w-full p-4 rounded-lg border-2 border-accent bg-accent/10 hover:bg-accent/15 transition-all text-left"
-                      onClick={handleLoadMonitoringDashboard}
-                    >
-                      <div className="flex items-center gap-3 mb-2">
-                        <div className="text-2xl">🖥️</div>
-                        <div className="flex-1">
-                          <div className="text-sm font-bold">System Monitoring</div>
-                          <div className="text-xs text-muted-foreground">Live Demo</div>
-                        </div>
-                        <Badge className="bg-accent text-accent-foreground">Ready</Badge>
-                      </div>
-                      <div className="text-xs text-muted-foreground">
-                        Real-time server metrics with CPU, memory, network, and alerts
-                      </div>
-                    </button>
-                    
-                    <div className="grid grid-cols-2 gap-3">
-                      {dashboardTemplates.map((template) => (
+                    <div className="space-y-2">
+                      <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Pre-Configured Dashboards</h3>
+                      <div className="grid gap-2">
                         <button
-                          key={template.id}
-                          className={`p-4 rounded-lg border-2 transition-all text-left hover:border-accent hover:bg-accent/5 ${
-                            selectedTemplate?.id === template.id
-                              ? 'border-accent bg-accent/10'
-                              : 'border-border'
-                          }`}
-                          onClick={() => setSelectedTemplate(template)}
+                          className="w-full p-3 rounded-lg border-2 border-accent bg-accent/10 hover:bg-accent/15 transition-all text-left"
+                          onClick={handleLoadMonitoringDashboard}
                         >
-                          <div className="text-3xl mb-2">{template.preview}</div>
-                          <div className="text-sm font-medium mb-1">{template.name}</div>
-                          <div className="text-xs text-muted-foreground">{template.category}</div>
+                          <div className="flex items-center gap-3">
+                            <Monitor size={24} weight="duotone" className="text-accent flex-shrink-0" />
+                            <div className="flex-1 min-w-0">
+                              <div className="text-sm font-bold">System Monitoring</div>
+                              <div className="text-xs text-muted-foreground">Real-time server metrics</div>
+                            </div>
+                            <Badge className="bg-accent text-accent-foreground flex-shrink-0">Ready</Badge>
+                          </div>
                         </button>
-                      ))}
+
+                        <button
+                          className="w-full p-3 rounded-lg border-2 border-primary bg-primary/10 hover:bg-primary/15 transition-all text-left"
+                          onClick={handleLoadAnalyticsDashboard}
+                        >
+                          <div className="flex items-center gap-3">
+                            <ChartLine size={24} weight="duotone" className="text-primary flex-shrink-0" />
+                            <div className="flex-1 min-w-0">
+                              <div className="text-sm font-bold">Analytics</div>
+                              <div className="text-xs text-muted-foreground">Web traffic & engagement</div>
+                            </div>
+                            <Badge className="bg-primary text-primary-foreground flex-shrink-0">Ready</Badge>
+                          </div>
+                        </button>
+
+                        <button
+                          className="w-full p-3 rounded-lg border-2 border-secondary bg-secondary/10 hover:bg-secondary/15 transition-all text-left"
+                          onClick={handleLoadSalesDashboard}
+                        >
+                          <div className="flex items-center gap-3">
+                            <CurrencyDollar size={24} weight="duotone" className="text-secondary flex-shrink-0" />
+                            <div className="flex-1 min-w-0">
+                              <div className="text-sm font-bold">Sales</div>
+                              <div className="text-xs text-muted-foreground">Revenue & pipeline tracking</div>
+                            </div>
+                            <Badge className="bg-secondary text-secondary-foreground flex-shrink-0">Ready</Badge>
+                          </div>
+                        </button>
+
+                        <button
+                          className="w-full p-3 rounded-lg border-2 border-accent bg-accent/10 hover:bg-accent/15 transition-all text-left"
+                          onClick={handleLoadSocialMediaDashboard}
+                        >
+                          <div className="flex items-center gap-3">
+                            <ShareNetwork size={24} weight="duotone" className="text-accent flex-shrink-0" />
+                            <div className="flex-1 min-w-0">
+                              <div className="text-sm font-bold">Social Media</div>
+                              <div className="text-xs text-muted-foreground">Multi-platform analytics</div>
+                            </div>
+                            <Badge className="bg-accent text-accent-foreground flex-shrink-0">Ready</Badge>
+                          </div>
+                        </button>
+                      </div>
+                    </div>
+                    
+                    <div className="pt-4 border-t border-border">
+                      <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2">Template Starters</h3>
+                      <div className="grid grid-cols-2 gap-3">
+                        {dashboardTemplates.map((template) => (
+                          <button
+                            key={template.id}
+                            className={`p-4 rounded-lg border-2 transition-all text-left hover:border-accent hover:bg-accent/5 ${
+                              selectedTemplate?.id === template.id
+                                ? 'border-accent bg-accent/10'
+                                : 'border-border'
+                            }`}
+                            onClick={() => setSelectedTemplate(template)}
+                          >
+                            <div className="text-3xl mb-2">{template.preview}</div>
+                            <div className="text-sm font-medium mb-1">{template.name}</div>
+                            <div className="text-xs text-muted-foreground">{template.category}</div>
+                          </button>
+                        ))}
+                      </div>
                     </div>
                   </div>
                 </ScrollArea>
@@ -455,18 +520,42 @@ function App() {
                         Any Style
                       </Badge>
                     </div>
-                    <div className="pt-4">
-                      <Button
-                        onClick={handleLoadMonitoringDashboard}
-                        className="bg-gradient-to-r from-primary to-secondary hover:opacity-90"
-                        size="lg"
-                      >
-                        <Monitor size={20} className="mr-2" weight="duotone" />
-                        Try System Monitoring Dashboard
-                      </Button>
-                      <p className="text-xs text-muted-foreground mt-2">
-                        See a live example with real-time metrics
-                      </p>
+                    <div className="pt-4 space-y-2">
+                      <p className="text-sm font-semibold text-foreground mb-3">Try a Pre-Configured Dashboard:</p>
+                      <div className="grid grid-cols-2 gap-2">
+                        <Button
+                          onClick={handleLoadMonitoringDashboard}
+                          variant="outline"
+                          className="h-auto py-3 flex-col gap-1 hover:border-accent"
+                        >
+                          <Monitor size={24} weight="duotone" />
+                          <span className="text-xs">System Monitoring</span>
+                        </Button>
+                        <Button
+                          onClick={handleLoadAnalyticsDashboard}
+                          variant="outline"
+                          className="h-auto py-3 flex-col gap-1 hover:border-primary"
+                        >
+                          <ChartLine size={24} weight="duotone" />
+                          <span className="text-xs">Analytics</span>
+                        </Button>
+                        <Button
+                          onClick={handleLoadSalesDashboard}
+                          variant="outline"
+                          className="h-auto py-3 flex-col gap-1 hover:border-secondary"
+                        >
+                          <CurrencyDollar size={24} weight="duotone" />
+                          <span className="text-xs">Sales</span>
+                        </Button>
+                        <Button
+                          onClick={handleLoadSocialMediaDashboard}
+                          variant="outline"
+                          className="h-auto py-3 flex-col gap-1 hover:border-accent"
+                        >
+                          <ShareNetwork size={24} weight="duotone" />
+                          <span className="text-xs">Social Media</span>
+                        </Button>
+                      </div>
                     </div>
                   </div>
                 </CardContent>

@@ -42,6 +42,8 @@ export function ComponentRenderer({ component, data }: ComponentRendererProps) {
         return <ProgressBar component={component} />
       case 'activity-feed':
         return <ActivityFeed component={component} data={data} />
+      case 'user-list':
+        return <UserList component={component} data={data} />
       case 'text-block':
         return <TextBlock component={component} />
       case 'cpu-monitor':
@@ -75,17 +77,32 @@ export function ComponentRenderer({ component, data }: ComponentRendererProps) {
 }
 
 function MetricCard({ component }: { component: DashboardComponent }) {
-  const icons = [
-    <Users key="users" size={24} weight="duotone" />,
-    <CurrencyDollar key="dollar" size={24} weight="duotone" />,
-    <ChartLine key="activity" size={24} weight="duotone" />,
-    <ShoppingCart key="cart" size={24} weight="duotone" />,
-    <ChatCircle key="message" size={24} weight="duotone" />,
-  ]
-  const icon = icons[Math.floor(Math.random() * icons.length)]
-  const value = component.props.value || Math.floor(Math.random() * 10000)
-  const change = component.props.change || (Math.random() * 40 - 10).toFixed(1)
-  const isPositive = parseFloat(change) > 0
+  const iconMap: Record<string, any> = {
+    'users': <Users key="users" size={24} weight="duotone" />,
+    'currency': <CurrencyDollar key="dollar" size={24} weight="duotone" />,
+    'chart': <ChartLine key="activity" size={24} weight="duotone" />,
+    'cart': <ShoppingCart key="cart" size={24} weight="duotone" />,
+    'message': <ChatCircle key="message" size={24} weight="duotone" />,
+    'target': <ChartLine key="target" size={24} weight="duotone" />,
+    'eye': <ChartLine key="eye" size={24} weight="duotone" />,
+    'heart': <ChartLine key="heart" size={24} weight="duotone" />,
+    'handshake': <ChartLine key="handshake" size={24} weight="duotone" />,
+    'funnel': <ChartLine key="funnel" size={24} weight="duotone" />,
+    'file': <ChartLine key="file" size={24} weight="duotone" />,
+  }
+  
+  const icon = iconMap[component.props?.icon] || <ChartLine size={24} weight="duotone" />
+  
+  let value = component.props.value || Math.floor(Math.random() * 10000)
+  if (component.props.value === 'dynamic') {
+    value = Math.floor(Math.random() * 100000)
+  }
+  
+  const prefix = component.props.prefix || ''
+  const suffix = component.props.suffix || ''
+  const trend = component.props.trend || 'up'
+  const trendValue = component.props.trendValue || (Math.random() * 40 - 10).toFixed(1) + '%'
+  const isPositive = trend === 'up'
 
   return (
     <Card className="h-full">
@@ -96,7 +113,7 @@ function MetricCard({ component }: { component: DashboardComponent }) {
         <div className="text-accent">{icon}</div>
       </CardHeader>
       <CardContent>
-        <div className="text-3xl font-bold">{value.toLocaleString()}</div>
+        <div className="text-3xl font-bold">{prefix}{value.toLocaleString()}{suffix}</div>
         <div className="flex items-center gap-1 text-sm mt-1">
           {isPositive ? (
             <TrendUp size={16} weight="bold" className="text-green-500" />
@@ -104,9 +121,9 @@ function MetricCard({ component }: { component: DashboardComponent }) {
             <TrendDown size={16} weight="bold" className="text-red-500" />
           )}
           <span className={isPositive ? 'text-green-500' : 'text-red-500'}>
-            {change}%
+            {trendValue}
           </span>
-          <span className="text-muted-foreground ml-1">vs last month</span>
+          <span className="text-muted-foreground ml-1">{component.description || 'vs last period'}</span>
         </div>
       </CardContent>
     </Card>
@@ -123,11 +140,14 @@ function ChartPlaceholder({ component }: { component: DashboardComponent }) {
         )}
       </CardHeader>
       <CardContent>
-        <div className="h-[200px] flex items-center justify-center border-2 border-dashed border-border rounded-lg">
+        <div className="h-[200px] flex items-center justify-center border-2 border-dashed border-border rounded-lg bg-muted/20">
           <div className="text-center text-muted-foreground">
             <ChartLine size={48} weight="duotone" className="mx-auto mb-2 opacity-50" />
-            <p className="text-sm">{component.type.replace('-', ' ').toUpperCase()}</p>
-            <p className="text-xs mt-1">Connected to live data</p>
+            <p className="text-sm font-medium">{component.type.replace('-', ' ').toUpperCase()}</p>
+            <p className="text-xs mt-1">Chart visualization with live data</p>
+            {component.props?.dataKey && (
+              <p className="text-xs mt-1 font-mono text-accent">Data: {component.props.dataKey}</p>
+            )}
           </div>
         </div>
       </CardContent>
@@ -136,8 +156,9 @@ function ChartPlaceholder({ component }: { component: DashboardComponent }) {
 }
 
 function DataTable({ component, data }: { component: DashboardComponent; data?: Record<string, any[]> }) {
-  const sampleData = data?.[Object.keys(data)[0]]?.slice(0, 5) || []
-  const columns = sampleData.length > 0 ? Object.keys(sampleData[0]) : ['Column 1', 'Column 2', 'Column 3']
+  const dataKey = component.props?.dataKey
+  const tableData = dataKey && data?.[dataKey] ? data[dataKey].slice(0, 5) : []
+  const columns = component.props?.columns || (tableData.length > 0 ? Object.keys(tableData[0]) : ['Column 1', 'Column 2', 'Column 3'])
 
   return (
     <Card className="h-full">
@@ -153,16 +174,16 @@ function DataTable({ component, data }: { component: DashboardComponent; data?: 
             <thead className="bg-muted">
               <tr>
                 {columns.map((col, idx) => (
-                  <th key={idx} className="text-left p-3 font-medium">
-                    {col}
+                  <th key={idx} className="text-left p-3 font-medium capitalize">
+                    {col.replace(/([A-Z])/g, ' $1').trim()}
                   </th>
                 ))}
               </tr>
             </thead>
             <tbody>
-              {sampleData.length > 0 ? (
-                sampleData.map((row, idx) => (
-                  <tr key={idx} className="border-t border-border">
+              {tableData.length > 0 ? (
+                tableData.map((row, idx) => (
+                  <tr key={idx} className="border-t border-border hover:bg-muted/50">
                     {columns.map((col, colIdx) => (
                       <td key={colIdx} className="p-3">
                         {String(row[col] || '-')}
@@ -245,7 +266,8 @@ function ProgressBar({ component }: { component: DashboardComponent }) {
 }
 
 function ActivityFeed({ component, data }: { component: DashboardComponent; data?: Record<string, any[]> }) {
-  const activities = data?.[Object.keys(data)[0]]?.slice(0, 4) || [
+  const dataKey = component.props?.dataKey
+  const activities = dataKey && data?.[dataKey] ? data[dataKey].slice(0, 5) : [
     { user: 'User 1', action: 'completed a task', time: '2 min ago' },
     { user: 'User 2', action: 'uploaded a file', time: '15 min ago' },
     { user: 'User 3', action: 'commented', time: '1 hour ago' },
@@ -255,22 +277,77 @@ function ActivityFeed({ component, data }: { component: DashboardComponent; data
     <Card className="h-full">
       <CardHeader>
         <CardTitle>{component.title || 'Recent Activity'}</CardTitle>
+        {component.description && (
+          <CardDescription>{component.description}</CardDescription>
+        )}
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
           {activities.map((activity, idx) => (
             <div key={idx} className="flex items-start gap-3">
               <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center text-xs font-bold text-primary-foreground">
-                {activity.user?.[0] || 'U'}
+                {(activity.user?.[0] || activity.company?.[0] || 'U').toUpperCase()}
               </div>
               <div className="flex-1 min-w-0">
                 <p className="text-sm">
-                  <span className="font-medium">{activity.user || 'User'}</span>{' '}
+                  <span className="font-medium">{activity.user || activity.company || 'User'}</span>{' '}
                   <span className="text-muted-foreground">{activity.action || 'performed an action'}</span>
+                  {activity.page && <span className="text-muted-foreground"> {activity.page}</span>}
+                  {activity.post && <span className="text-muted-foreground"> {activity.post}</span>}
                 </p>
                 <p className="text-xs text-muted-foreground mt-1">
                   {activity.time || 'Just now'}
+                  {activity.platform && <span className="ml-2">· {activity.platform}</span>}
                 </p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </CardContent>
+    </Card>
+  )
+}
+
+function UserList({ component, data }: { component: DashboardComponent; data?: Record<string, any[]> }) {
+  const dataKey = component.props?.dataKey
+  const users = dataKey && data?.[dataKey] ? data[dataKey].slice(0, 5) : []
+
+  return (
+    <Card className="h-full">
+      <CardHeader>
+        <CardTitle>{component.title || 'Users'}</CardTitle>
+        {component.description && (
+          <CardDescription>{component.description}</CardDescription>
+        )}
+      </CardHeader>
+      <CardContent>
+        <div className="space-y-3">
+          {users.map((user, idx) => (
+            <div key={idx} className="flex items-center justify-between p-3 rounded-lg border border-border hover:bg-muted/50 transition-colors">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-sm font-bold text-primary-foreground">
+                  {(user.name?.[0] || 'U').toUpperCase()}
+                </div>
+                <div>
+                  <p className="text-sm font-medium">{user.name || 'User'}</p>
+                  <p className="text-xs text-muted-foreground">
+                    {user.revenue && `$${user.revenue.toLocaleString()}`}
+                    {user.deals && ` · ${user.deals} deals`}
+                  </p>
+                </div>
+              </div>
+              <div className="text-right">
+                {user.progress !== undefined && (
+                  <div className="flex items-center gap-2">
+                    <div className="w-24 h-2 bg-muted rounded-full overflow-hidden">
+                      <div
+                        className="h-full bg-gradient-to-r from-primary to-accent transition-all"
+                        style={{ width: `${Math.min(100, user.progress)}%` }}
+                      />
+                    </div>
+                    <span className="text-xs font-medium text-muted-foreground">{user.progress}%</span>
+                  </div>
+                )}
               </div>
             </div>
           ))}
