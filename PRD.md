@@ -138,6 +138,13 @@ This is a meta-application that generates other applications dynamically. It req
 - **Progression**: User opens timeline scrubber → Views all animation tracks vertically → Clicks timeline to scrub playhead → Drags keyframes horizontally to adjust timing → Holds Shift to disable snapping → Steps forward/backward frame-by-frame for precision → Jumps to next/previous keyframe quickly → Adjusts zoom for detailed work or overview → Changes playback speed for careful review → Clicks keyframe to select → Edits properties in sidebar inspector → Tests changes with play button → Saves refined animation
 - **Success criteria**: Keyframe dragging feels instant (<16ms response), scrubbing updates preview in real-time at 60fps, snap functionality is intuitive and can be easily overridden, frame stepping advances exactly 1/60th second intervals, zoom transitions are smooth, property changes apply immediately, playback speed adjustments work without audio pitch shifting effect, multi-track view clearly shows timing relationships between animations, and users can achieve frame-perfect timing consistently
 
+### Animation Recording Mode
+- **Functionality**: Real-time interaction capture system that records all user interactions (clicks, mouse movements, scrolls, hovers) with millisecond precision timestamps, configurable event type filters, pause/resume controls, live event counting, playback engine with adjustable speed (0.25x-4x), animated cursor visualization during playback, persistent storage of unlimited named recordings, and multiple export formats (JSON for data analysis, CSV for spreadsheets, React/Framer Motion code for implementation)
+- **Purpose**: Bridge the gap between manual interaction testing and automated animation creation by capturing authentic user behavior, enabling designers to extract timing patterns from real gestures, developers to document bugs with precise reproduction steps, and teams to create realistic animation prototypes based on actual usage
+- **Trigger**: User navigates to "Animations" tab, opens "Animation Recorder" card, optionally names recording, configures event capture settings, and clicks "Start Recording"
+- **Progression**: User enters recording name → Toggles event type filters (clicks/mouse/scrolls/hovers) → Clicks "Start Recording" → Badge shows "Recording" status → User interacts naturally with page → Live counter displays captured events → User can pause/resume recording → Clicks "Stop" to end → Recording saves to list → User selects recording from list → Views statistics (duration, event counts, breakdown) → Adjusts playback speed → Enables/disables cursor visualization → Clicks "Play Recording" → Animated cursor follows recorded path → Visual ripples mark clicks → Scroll animates smoothly → Playback progress bar advances → Recording completes or user stops → User clicks export → Selects format (JSON/CSV/Code) → File downloads → User can delete old recordings or replay at different speeds
+- **Success criteria**: All events capture with <5ms timestamp accuracy, mouse movement throttling maintains smooth playback without excessive data, recording UI doesn't interfere with natural interactions, playback reproduces actions with 95%+ positional accuracy, generated React code is syntactically correct and ready to integrate, exported JSON structure is well-documented and parseable, CSV format opens correctly in Excel/Sheets, cursor animation feels natural at all playback speeds, recordings persist across browser sessions, users can capture 5+ minute sessions without performance degradation, and playback works even if page layout changed slightly
+
 ## Edge Case Handling
 
 - **Ambiguous Prompts**: System asks clarifying questions before generating, suggests multiple interpretations
@@ -175,6 +182,13 @@ This is a meta-application that generates other applications dynamically. It req
 - **Too Many Simultaneous Animations**: Choreography builder warns when more than 20 elements animate simultaneously and suggests staggering
 - **Animation Timing Conflicts**: When steps overlap in choreography, system displays warning and suggests adjusting delays
 - **Missing Animation Elements**: If element IDs don't exist in DOM, animations fail gracefully without breaking page
+- **Recording During High Activity**: Mouse movement throttling (50ms) prevents data explosion during rapid movements
+- **Playback on Different Screen Sizes**: System scales coordinates proportionally when viewport differs from recording dimensions
+- **Recording Interferes with Interaction**: Recorder card can be minimized during recording to avoid blocking important UI elements
+- **Very Long Recordings**: System warns at 10 minutes and auto-stops at 15 minutes to prevent browser memory issues
+- **Export File Too Large**: Large recordings (>10MB JSON) trigger compression or suggest CSV export for better size
+- **Cursor Lost During Playback**: Cursor animation respects viewport boundaries and snaps back to visible area if coordinates exceed
+- **Rapid Click Recording**: Debouncing prevents accidental double-click capture while preserving intentional rapid interactions
 
 ## Design Direction
 

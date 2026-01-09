@@ -10,6 +10,7 @@ An AI-powered dashboard generator that transforms natural language descriptions 
 - **Interactive Charts**: Line, bar, area, pie, radar, scatter, and composed charts with drill-down capabilities
 - **Real-Time Data Connectors**: Connect to 7+ pre-configured public APIs or create custom connectors
 - **Webhook Receivers**: Accept real-time push data from GitHub, Stripe, Slack, Shopify, and 6+ other services
+- **Animation Recording**: Capture live user interactions and export as replayable animations
 - **Drill-Down Exploration**: Click any chart element to explore deeper data hierarchies
 - **Export & Persistence**: Save, load, and export dashboard configurations
 
@@ -41,6 +42,26 @@ Receive real-time push data from external services:
 
 See [WEBHOOKS.md](./WEBHOOKS.md) for full documentation.
 
+### Animation & Visual Tools
+
+#### Animation Recording Mode
+Capture live user interactions and replay them:
+- 🎥 **Real-Time Capture**: Record clicks, mouse movements, scrolls, and hovers
+- ⏯️ **Playback Controls**: Replay at 0.25x to 4x speed with visual cursor
+- 💾 **Recording Management**: Save unlimited named recordings
+- 📤 **Multiple Export Formats**: JSON, CSV, and React/Framer Motion code
+
+See [ANIMATION_RECORDING.md](./ANIMATION_RECORDING.md) for full documentation.
+
+#### Visual Pattern Builder
+Create animated patterns with drag-and-drop interface:
+- 🎨 Canvas-based pattern design
+- ⚡ Timeline animation with keyframes
+- 📚 Pre-built animation preset library
+- 🎭 Multi-element choreography builder
+
+See [PATTERN_BUILDER.md](./PATTERN_BUILDER.md) and [ANIMATION_PRESETS.md](./ANIMATION_PRESETS.md) for full documentation.
+
 ## 🏁 Getting Started
 
 ### Quick Start
@@ -67,6 +88,13 @@ See [WEBHOOKS.md](./WEBHOOKS.md) for full documentation.
    - Configure in external service
    - Test with simulator
 
+5. **Record Animations**
+   - Switch to "Animations" tab
+   - Click "Start Recording"
+   - Interact with the page
+   - Stop and replay your interactions
+   - Export as code or data
+
 ## 💡 Usage Examples
 
 ### Generate a Sales Dashboard
@@ -88,6 +116,15 @@ top products, and recent orders
 4. Add to GitHub repo settings
 5. Receive real-time push events
 
+### Record User Interactions
+1. Navigate to "Animations" tab
+2. Name your recording
+3. Click "Start Recording"
+4. Perform interactions
+5. Stop recording
+6. Replay at any speed
+7. Export as JSON, CSV, or React code
+
 ## 🛠 Technical Stack
 
 - **Framework**: React 19 + TypeScript
@@ -103,6 +140,12 @@ top products, and recent orders
 - [PRD.md](./PRD.md) - Product Requirements Document
 - [DATA_CONNECTORS.md](./DATA_CONNECTORS.md) - API Connector Guide
 - [WEBHOOKS.md](./WEBHOOKS.md) - Webhook Integration Guide
+- [ANIMATION_RECORDING.md](./ANIMATION_RECORDING.md) - Animation Recording Mode Guide
+- [PATTERN_BUILDER.md](./PATTERN_BUILDER.md) - Visual Pattern Builder Guide
+- [ANIMATION_PRESETS.md](./ANIMATION_PRESETS.md) - Animation Presets Library
+- [PAYLOAD_TRANSFORMS.md](./PAYLOAD_TRANSFORMS.md) - Webhook Transform Guide
+- [TRANSFORM_PATTERNS.md](./TRANSFORM_PATTERNS.md) - Transform Pattern Library
+- [AI_TRANSFORM_README.md](./AI_TRANSFORM_README.md) - AI Transform Generator
 
 ## 🎨 Architecture
 

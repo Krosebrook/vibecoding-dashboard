@@ -31,6 +31,7 @@ import { TimelineScrubber } from '@/components/TimelineScrubber'
 import { TimelineScrubberDemo } from '@/components/TimelineScrubberDemo'
 import { AnimationPresetsLibrary } from '@/components/AnimationPresetsLibrary'
 import { ChoreographyBuilder } from '@/components/ChoreographyBuilder'
+import { AnimationRecorder } from '@/components/AnimationRecorder'
 import { toast } from 'sonner'
 import { motion, AnimatePresence } from 'framer-motion'
 
@@ -253,6 +254,7 @@ function App() {
         <VisualPatternBuilder />
       ) : viewMode === 'animation' ? (
         <div className="container mx-auto px-6 py-8 space-y-6">
+          <AnimationRecorder />
           <TimelineScrubberDemo />
           <AnimationPresetsLibrary />
           <ChoreographyBuilder />
