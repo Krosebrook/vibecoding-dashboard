@@ -18,6 +18,15 @@ import {
   AlertList,
   RealtimeChart 
 } from './SystemMonitoring'
+import {
+  InteractiveLineChart,
+  InteractiveBarChart,
+  InteractiveAreaChart,
+  InteractivePieChart,
+  InteractiveRadarChart,
+  InteractiveComposedChart,
+  InteractiveScatterChart,
+} from './InteractiveCharts'
 
 interface ComponentRendererProps {
   component: DashboardComponent
@@ -30,10 +39,19 @@ export function ComponentRenderer({ component, data }: ComponentRendererProps) {
       case 'metric-card':
         return <MetricCard component={component} />
       case 'line-chart':
+        return <InteractiveLineChart component={component} data={data} />
       case 'bar-chart':
+        return <InteractiveBarChart component={component} data={data} />
       case 'pie-chart':
+        return <InteractivePieChart component={component} data={data} />
       case 'area-chart':
-        return <ChartPlaceholder component={component} />
+        return <InteractiveAreaChart component={component} data={data} />
+      case 'radar-chart':
+        return <InteractiveRadarChart component={component} data={data} />
+      case 'composed-chart':
+        return <InteractiveComposedChart component={component} data={data} />
+      case 'scatter-chart':
+        return <InteractiveScatterChart component={component} data={data} />
       case 'data-table':
         return <DataTable component={component} data={data} />
       case 'stat-grid':

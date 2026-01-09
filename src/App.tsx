@@ -7,7 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Badge } from '@/components/ui/badge'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import { Sparkle, Layout, Code, Eye, Plus, Download, Check, Warning, Monitor, ChartLine, CurrencyDollar, ShareNetwork } from '@phosphor-icons/react'
+import { Sparkle, Layout, Code, Eye, Plus, Download, Check, Warning, Monitor, ChartLine, CurrencyDollar, ShareNetwork, ChartBar } from '@phosphor-icons/react'
 import { DashboardConfig, GenerationProgress, DashboardTemplate } from '@/lib/types'
 import { generateDashboard, refineDashboard, generateSetupInstructions } from '@/lib/dashboard-generator'
 import { dashboardTemplates } from '@/lib/templates'
@@ -15,6 +15,7 @@ import { systemMonitoringDashboard } from '@/lib/monitoring-template'
 import { analyticsDashboard } from '@/lib/analytics-template'
 import { salesDashboard } from '@/lib/sales-template'
 import { socialMediaDashboard } from '@/lib/social-media-template'
+import { businessIntelligenceDashboard } from '@/lib/business-intelligence-template'
 import { DashboardPreview } from '@/components/DashboardPreview'
 import { toast } from 'sonner'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -122,6 +123,11 @@ function App() {
   const handleLoadSocialMediaDashboard = () => {
     setCurrentDashboard(socialMediaDashboard)
     toast.success('Social Media Dashboard loaded!')
+  }
+
+  const handleLoadBusinessIntelligenceDashboard = () => {
+    setCurrentDashboard(businessIntelligenceDashboard)
+    toast.success('Business Intelligence Dashboard loaded!')
   }
 
   const handleDeleteDashboard = (id: string) => {
@@ -319,6 +325,20 @@ function App() {
                     <div className="space-y-2">
                       <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Pre-Configured Dashboards</h3>
                       <div className="grid gap-2">
+                        <button
+                          className="w-full p-3 rounded-lg border-2 border-accent bg-accent/10 hover:bg-accent/15 transition-all text-left"
+                          onClick={handleLoadBusinessIntelligenceDashboard}
+                        >
+                          <div className="flex items-center gap-3">
+                            <ChartBar size={24} weight="duotone" className="text-accent flex-shrink-0" />
+                            <div className="flex-1 min-w-0">
+                              <div className="text-sm font-bold">Business Intelligence</div>
+                              <div className="text-xs text-muted-foreground">All interactive chart types</div>
+                            </div>
+                            <Badge className="bg-accent text-accent-foreground flex-shrink-0">Featured</Badge>
+                          </div>
+                        </button>
+
                         <button
                           className="w-full p-3 rounded-lg border-2 border-accent bg-accent/10 hover:bg-accent/15 transition-all text-left"
                           onClick={handleLoadMonitoringDashboard}
@@ -524,6 +544,14 @@ function App() {
                       <p className="text-sm font-semibold text-foreground mb-3">Try a Pre-Configured Dashboard:</p>
                       <div className="grid grid-cols-2 gap-2">
                         <Button
+                          onClick={handleLoadBusinessIntelligenceDashboard}
+                          variant="outline"
+                          className="h-auto py-3 flex-col gap-1 hover:border-accent"
+                        >
+                          <ChartBar size={24} weight="duotone" />
+                          <span className="text-xs">Business Intelligence</span>
+                        </Button>
+                        <Button
                           onClick={handleLoadMonitoringDashboard}
                           variant="outline"
                           className="h-auto py-3 flex-col gap-1 hover:border-accent"
@@ -550,7 +578,7 @@ function App() {
                         <Button
                           onClick={handleLoadSocialMediaDashboard}
                           variant="outline"
-                          className="h-auto py-3 flex-col gap-1 hover:border-accent"
+                          className="h-auto py-3 flex-col gap-1 hover:border-accent col-span-2"
                         >
                           <ShareNetwork size={24} weight="duotone" />
                           <span className="text-xs">Social Media</span>

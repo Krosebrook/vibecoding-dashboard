@@ -68,6 +68,13 @@ This is a meta-application that generates other applications dynamically. It req
 - **Progression**: User clicks button → Dashboard loads instantly → Real-time metrics begin updating → User can save, export, or use as starting point
 - **Success criteria**: All metrics update smoothly in real-time, dashboard is immediately useful, and provides a clear example of what's possible
 
+### Interactive Data Visualization
+- **Functionality**: Rich, interactive charts with real data that respond to user interaction including line charts, bar charts, area charts, pie charts, radar charts, composed charts, and scatter plots with hover tooltips, legends, and smooth animations
+- **Purpose**: Transform data into actionable insights through beautiful, interactive visualizations that feel responsive and professional
+- **Trigger**: Automatically generated when dashboard requires data visualization or user specifies chart type in prompt
+- **Progression**: Dashboard generated with chart components → Data loaded and processed → Charts render with animations → User hovers/interacts → Tooltips and highlights appear → Data updates trigger smooth transitions
+- **Success criteria**: All charts render smoothly at 60fps, interactions feel immediate, tooltips are informative, and charts adapt to container size responsively
+
 ## Edge Case Handling
 
 - **Ambiguous Prompts**: System asks clarifying questions before generating, suggests multiple interpretations
