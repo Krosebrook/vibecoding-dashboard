@@ -15,6 +15,7 @@ import { PatternCanvas } from '@/components/PatternCanvas'
 import { AnimatedPatternCanvas } from '@/components/AnimatedPatternCanvas'
 import { PatternElementEditor } from '@/components/PatternElementEditor'
 import { AnimationTimeline } from '@/components/AnimationTimeline'
+import { TimelineScrubber } from '@/components/TimelineScrubber'
 import { Palette, Plus, Download, Upload, Code, ArrowCounterClockwise, ArrowClockwise, Sparkle, Play, Pause } from '@phosphor-icons/react'
 import { toast } from 'sonner'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -637,14 +638,150 @@ Return ONLY a valid JSON object with this structure:
 
         {currentPattern && currentPattern.elements.length > 0 && (
           <div className="w-full">
-            <AnimationTimeline 
-              elements={currentPattern.elements}
-              onUpdateElement={updateElement}
-              externalIsPlaying={isAnimationPlaying}
-              externalCurrentTime={animationTime}
-              onPlayStateChange={setIsAnimationPlaying}
-              onTimeChange={setAnimationTime}
-            />
+            <Tabs defaultValue="timeline" className="w-full">
+              <TabsList className="w-fit ml-6">
+                <TabsTrigger value="timeline">Keyframe Timeline</TabsTrigger>
+                <TabsTrigger value="scrubber">Precision Scrubber</TabsTrigger>
+              </TabsList>
+              <TabsContent value="timeline" className="mt-0">
+                <AnimationTimeline 
+                  elements={currentPattern.elements}
+                  onUpdateElement={updateElement}
+                  externalIsPlaying={isAnimationPlaying}
+                  externalCurrentTime={animationTime}
+                  onPlayStateChange={setIsAnimationPlaying}
+                  onTimeChange={setAnimationTime}
+                />
+              </TabsContent>
+              <TabsContent value="scrubber" className="mt-0">
+                <TimelineScrubber
+                  tracks={currentPattern.elements.flatMap(element => 
+                    (element.animations || []).map(anim => ({
+                      id: anim.id,
+                      name: `${element.name} - ${anim.name}`,
+                      elementId: element.id,
+                      enabled: anim.enabled,
+                      keyframes: anim.keyframes.map(kf => ({
+                        id: kf.id,
+                        time: (anim.delay + (anim.duration * kf.time / 100)),
+                        properties: {
+                          x: kf.x ?? element.x,
+                          y: kf.y ?? element.y,
+                          scale: kf.scale ?? element.scale,
+                          rotation: kf.rotation ?? element.rotation,
+                          opacity: kf.opacity ?? element.opacity,
+                        },
+                        easing: anim.easing,
+                        label: kf.time === 0 ? 'Start' : kf.time === 100 ? 'End' : undefined,
+                      })),
+                      color: element.color,
+                      locked: false,
+                    }))
+                  )}
+                  duration={Math.max(
+                    ...currentPattern.elements.flatMap(el => 
+                      (el.animations || []).map(a => a.duration + a.delay)
+                    ),
+                    5000
+                  )}
+                  onUpdateTrack={(trackId, updates) => {
+                    const element = currentPattern.elements.find(el => 
+                      el.animations?.some(a => a.id === trackId)
+                    )
+                    if (!element) return
+                    
+                    const animations = element.animations!.map(a => 
+                      a.id === trackId ? { ...a, enabled: updates.enabled ?? a.enabled } : a
+                    )
+                    updateElement(element.id, { animations })
+                  }}
+                  onCreateKeyframe={(trackId, time) => {
+                    const element = currentPattern.elements.find(el => 
+                      el.animations?.some(a => a.id === trackId)
+                    )
+                    if (!element) return
+                    
+                    const animation = element.animations!.find(a => a.id === trackId)
+                    if (!animation) return
+                    
+                    const percentage = ((time - animation.delay) / animation.duration) * 100
+                    const newKeyframe = {
+                      id: `kf-${Date.now()}`,
+                      time: Math.max(0, Math.min(100, percentage)),
+                      x: element.x,
+                      y: element.y,
+                      scale: element.scale,
+                      rotation: element.rotation,
+                      opacity: element.opacity,
+                    }
+                    
+                    const keyframes = [...animation.keyframes, newKeyframe].sort((a, b) => a.time - b.time)
+                    const animations = element.animations!.map(a => 
+                      a.id === trackId ? { ...a, keyframes } : a
+                    )
+                    updateElement(element.id, { animations })
+                  }}
+                  onDeleteKeyframe={(trackId, keyframeId) => {
+                    const element = currentPattern.elements.find(el => 
+                      el.animations?.some(a => a.id === trackId)
+                    )
+                    if (!element) return
+                    
+                    const animation = element.animations!.find(a => a.id === trackId)
+                    if (!animation || animation.keyframes.length <= 2) return
+                    
+                    const keyframes = animation.keyframes.filter(kf => kf.id !== keyframeId)
+                    const animations = element.animations!.map(a => 
+                      a.id === trackId ? { ...a, keyframes } : a
+                    )
+                    updateElement(element.id, { animations })
+                  }}
+                  onUpdateKeyframe={(trackId, keyframeId, updates) => {
+                    const element = currentPattern.elements.find(el => 
+                      el.animations?.some(a => a.id === trackId)
+                    )
+                    if (!element) return
+                    
+                    const animation = element.animations!.find(a => a.id === trackId)
+                    if (!animation) return
+                    
+                    const keyframes = animation.keyframes.map(kf => {
+                      if (kf.id !== keyframeId) return kf
+                      
+                      const updatedKf = { ...kf }
+                      
+                      if (updates.time !== undefined) {
+                        const percentage = ((updates.time - animation.delay) / animation.duration) * 100
+                        updatedKf.time = Math.max(0, Math.min(100, percentage))
+                      }
+                      
+                      if (updates.properties) {
+                        if (updates.properties.x !== undefined) updatedKf.x = Number(updates.properties.x)
+                        if (updates.properties.y !== undefined) updatedKf.y = Number(updates.properties.y)
+                        if (updates.properties.scale !== undefined) updatedKf.scale = Number(updates.properties.scale)
+                        if (updates.properties.rotation !== undefined) updatedKf.rotation = Number(updates.properties.rotation)
+                        if (updates.properties.opacity !== undefined) updatedKf.opacity = Number(updates.properties.opacity)
+                      }
+                      
+                      if (updates.label !== undefined) {
+                        updatedKf.id = kf.id
+                      }
+                      
+                      return updatedKf
+                    })
+                    
+                    const animations = element.animations!.map(a => 
+                      a.id === trackId ? { ...a, keyframes: keyframes.sort((a, b) => a.time - b.time) } : a
+                    )
+                    updateElement(element.id, { animations })
+                  }}
+                  currentTime={animationTime}
+                  isPlaying={isAnimationPlaying}
+                  onTimeChange={setAnimationTime}
+                  onPlayStateChange={setIsAnimationPlaying}
+                />
+              </TabsContent>
+            </Tabs>
           </div>
         )}
       </div>

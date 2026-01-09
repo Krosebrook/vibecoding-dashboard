@@ -26,6 +26,9 @@ import { WebhookTransformManager } from '@/components/WebhookTransformManager'
 import { TransformPatternLibrary } from '@/components/TransformPatternLibrary'
 import { AITransformQuickStart } from '@/components/AITransformQuickStart'
 import { VisualPatternBuilder } from '@/components/VisualPatternBuilder'
+import { AnimationTimeline } from '@/components/AnimationTimeline'
+import { TimelineScrubber } from '@/components/TimelineScrubber'
+import { TimelineScrubberDemo } from '@/components/TimelineScrubberDemo'
 import { AnimationPresetsLibrary } from '@/components/AnimationPresetsLibrary'
 import { ChoreographyBuilder } from '@/components/ChoreographyBuilder'
 import { toast } from 'sonner'
@@ -250,6 +253,7 @@ function App() {
         <VisualPatternBuilder />
       ) : viewMode === 'animation' ? (
         <div className="container mx-auto px-6 py-8 space-y-6">
+          <TimelineScrubberDemo />
           <AnimationPresetsLibrary />
           <ChoreographyBuilder />
         </div>
