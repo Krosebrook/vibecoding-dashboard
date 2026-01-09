@@ -22,6 +22,8 @@ import { DataConnectorManager } from '@/components/DataConnectorManager'
 import { ConnectorDrillDownDemo } from '@/components/ConnectorDrillDownDemo'
 import { WebhookManager } from '@/components/WebhookManager'
 import { WebhookQuickStart } from '@/components/WebhookQuickStart'
+import { WebhookTransformManager } from '@/components/WebhookTransformManager'
+import { TransformPatternLibrary } from '@/components/TransformPatternLibrary'
 import { toast } from 'sonner'
 import { motion, AnimatePresence } from 'framer-motion'
 
@@ -321,6 +323,10 @@ function App() {
             <WebhookQuickStart />
 
             <WebhookManager />
+
+            <WebhookTransformManager />
+
+            <TransformPatternLibrary />
 
             <DataConnectorManager />
 

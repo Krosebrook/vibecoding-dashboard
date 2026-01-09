@@ -96,6 +96,13 @@ This is a meta-application that generates other applications dynamically. It req
 - **Progression**: User clicks create webhook → Selects provider template (GitHub/Stripe/etc) → System generates unique endpoint → User copies URL → Configures in external service → External events trigger webhook → Events appear in buffer → Dashboard updates in real-time → User can view event history, test with simulator, or integrate event data into charts/visualizations
 - **Success criteria**: Webhook endpoints are instantly accessible, events buffer correctly with no data loss, signature verification works for all provider types, test simulator accurately mimics real events, event viewer displays readable payloads, integration with dashboard charts is seamless, and webhooks persist across sessions
 
+### Webhook Payload Transformation
+- **Functionality**: Visual wizard for mapping and transforming incoming webhook payloads to dashboard data models with 4 transform types (direct mapping, JavaScript functions, computed fields, conditional logic), auto-suggest mappings from sample payloads, live testing environment, code generation, transform pattern library with 24+ ready-to-use functions, visual flow diagrams, and automatic application to webhook events
+- **Purpose**: Bridge the gap between external service data formats and dashboard requirements, enabling complex data transformations without coding while maintaining flexibility for power users
+- **Trigger**: User creates new transform from webhook manager, selects webhook to configure, or edits existing transform
+- **Progression**: User opens transform wizard → Selects webhook → Pastes sample payload → Adds field mappings (source path → target field) → Chooses transform type (direct/function/computed/conditional) → Writes custom functions if needed or uses pattern library → Tests transform with sample data → Views generated code → Saves transform → Transform automatically applies to all webhook events
+- **Success criteria**: Transform wizard is intuitive for non-technical users, auto-suggest creates 80%+ of mappings correctly, pattern library covers common scenarios, test environment catches errors before deployment, transforms execute <50ms per event, visual flow diagram aids understanding, and generated code is production-ready
+
 ## Edge Case Handling
 
 - **Ambiguous Prompts**: System asks clarifying questions before generating, suggests multiple interpretations
@@ -119,6 +126,10 @@ This is a meta-application that generates other applications dynamically. It req
 - **Duplicate Webhook Events**: Event IDs prevent duplicate processing when external services retry delivery
 - **Malformed Webhook Payloads**: Validation functions catch malformed data before processing; errors logged with payload examples
 - **Webhook Endpoint Collisions**: System generates unique endpoint identifiers preventing URL conflicts
+- **Transform Function Errors**: Try-catch blocks around all custom functions prevent crashes; errors show in test environment with helpful messages
+- **Missing Source Fields**: Default values configured per mapping handle missing data gracefully without breaking transforms
+- **Complex Nested Structures**: Dot notation and array indexing support deep path traversal in payload structures
+- **Type Mismatches**: Transform functions include type validation preventing common type errors (string operations on numbers, etc.)
 
 ## Design Direction
 
