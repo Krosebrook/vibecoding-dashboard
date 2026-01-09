@@ -39,6 +39,12 @@ export type ComponentType =
   | 'image-gallery'
   | 'map'
   | 'timeline'
+  | 'cpu-monitor'
+  | 'memory-monitor'
+  | 'network-monitor'
+  | 'server-status'
+  | 'alert-list'
+  | 'realtime-chart'
 
 export interface Position {
   row: number

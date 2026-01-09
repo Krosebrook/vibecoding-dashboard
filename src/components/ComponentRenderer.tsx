@@ -10,6 +10,14 @@ import {
   ChatCircle,
   Calendar as CalendarIcon,
 } from '@phosphor-icons/react'
+import { 
+  CPUMonitor, 
+  MemoryMonitor, 
+  NetworkMonitor, 
+  ServerStatus, 
+  AlertList,
+  RealtimeChart 
+} from './SystemMonitoring'
 
 interface ComponentRendererProps {
   component: DashboardComponent
@@ -36,6 +44,18 @@ export function ComponentRenderer({ component, data }: ComponentRendererProps) {
         return <ActivityFeed component={component} data={data} />
       case 'text-block':
         return <TextBlock component={component} />
+      case 'cpu-monitor':
+        return <CPUMonitor component={component} />
+      case 'memory-monitor':
+        return <MemoryMonitor component={component} />
+      case 'network-monitor':
+        return <NetworkMonitor component={component} />
+      case 'server-status':
+        return <ServerStatus component={component} />
+      case 'alert-list':
+        return <AlertList component={component} />
+      case 'realtime-chart':
+        return <RealtimeChart component={component} />
       default:
         return <GenericComponent component={component} />
     }

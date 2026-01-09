@@ -7,10 +7,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Badge } from '@/components/ui/badge'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import { Sparkle, Layout, Code, Eye, Plus, Download, Check, Warning } from '@phosphor-icons/react'
+import { Sparkle, Layout, Code, Eye, Plus, Download, Check, Warning, Monitor } from '@phosphor-icons/react'
 import { DashboardConfig, GenerationProgress, DashboardTemplate } from '@/lib/types'
 import { generateDashboard, refineDashboard, generateSetupInstructions } from '@/lib/dashboard-generator'
 import { dashboardTemplates } from '@/lib/templates'
+import { systemMonitoringDashboard } from '@/lib/monitoring-template'
 import { DashboardPreview } from '@/components/DashboardPreview'
 import { toast } from 'sonner'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -98,6 +99,11 @@ function App() {
   const handleLoadDashboard = (dashboard: DashboardConfig) => {
     setCurrentDashboard(dashboard)
     toast.success('Dashboard loaded!')
+  }
+
+  const handleLoadMonitoringDashboard = () => {
+    setCurrentDashboard(systemMonitoringDashboard)
+    toast.success('System Monitoring Dashboard loaded!')
   }
 
   const handleDeleteDashboard = (id: string) => {
@@ -291,22 +297,41 @@ function App() {
               </CardHeader>
               <CardContent>
                 <ScrollArea className="h-[300px]">
-                  <div className="grid grid-cols-2 gap-3">
-                    {dashboardTemplates.map((template) => (
-                      <button
-                        key={template.id}
-                        className={`p-4 rounded-lg border-2 transition-all text-left hover:border-accent hover:bg-accent/5 ${
-                          selectedTemplate?.id === template.id
-                            ? 'border-accent bg-accent/10'
-                            : 'border-border'
-                        }`}
-                        onClick={() => setSelectedTemplate(template)}
-                      >
-                        <div className="text-3xl mb-2">{template.preview}</div>
-                        <div className="text-sm font-medium mb-1">{template.name}</div>
-                        <div className="text-xs text-muted-foreground">{template.category}</div>
-                      </button>
-                    ))}
+                  <div className="space-y-3">
+                    <button
+                      className="w-full p-4 rounded-lg border-2 border-accent bg-accent/10 hover:bg-accent/15 transition-all text-left"
+                      onClick={handleLoadMonitoringDashboard}
+                    >
+                      <div className="flex items-center gap-3 mb-2">
+                        <div className="text-2xl">🖥️</div>
+                        <div className="flex-1">
+                          <div className="text-sm font-bold">System Monitoring</div>
+                          <div className="text-xs text-muted-foreground">Live Demo</div>
+                        </div>
+                        <Badge className="bg-accent text-accent-foreground">Ready</Badge>
+                      </div>
+                      <div className="text-xs text-muted-foreground">
+                        Real-time server metrics with CPU, memory, network, and alerts
+                      </div>
+                    </button>
+                    
+                    <div className="grid grid-cols-2 gap-3">
+                      {dashboardTemplates.map((template) => (
+                        <button
+                          key={template.id}
+                          className={`p-4 rounded-lg border-2 transition-all text-left hover:border-accent hover:bg-accent/5 ${
+                            selectedTemplate?.id === template.id
+                              ? 'border-accent bg-accent/10'
+                              : 'border-border'
+                          }`}
+                          onClick={() => setSelectedTemplate(template)}
+                        >
+                          <div className="text-3xl mb-2">{template.preview}</div>
+                          <div className="text-sm font-medium mb-1">{template.name}</div>
+                          <div className="text-xs text-muted-foreground">{template.category}</div>
+                        </button>
+                      ))}
+                    </div>
                   </div>
                 </ScrollArea>
               </CardContent>
@@ -429,6 +454,19 @@ function App() {
                         <Check size={14} />
                         Any Style
                       </Badge>
+                    </div>
+                    <div className="pt-4">
+                      <Button
+                        onClick={handleLoadMonitoringDashboard}
+                        className="bg-gradient-to-r from-primary to-secondary hover:opacity-90"
+                        size="lg"
+                      >
+                        <Monitor size={20} className="mr-2" weight="duotone" />
+                        Try System Monitoring Dashboard
+                      </Button>
+                      <p className="text-xs text-muted-foreground mt-2">
+                        See a live example with real-time metrics
+                      </p>
                     </div>
                   </div>
                 </CardContent>

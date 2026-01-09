@@ -20,11 +20,11 @@ This is a meta-application that generates other applications dynamically. It req
 - **Success criteria**: Dashboard matches user intent, is fully functional, and requires minimal iteration
 
 ### Multi-Style Dashboard Templates
-- **Functionality**: Pre-configured starting points for common dashboard types (analytics, CRM, project management, monitoring, social, e-commerce, etc.)
-- **Purpose**: Accelerates creation with intelligent defaults while remaining fully customizable
-- **Trigger**: User selects template from gallery or specifies type in prompt
-- **Progression**: User browses templates → Selects template → Describes customizations → AI adapts template → Dashboard generates
-- **Success criteria**: Templates cover 80% of common use cases and serve as good starting points
+- **Functionality**: Pre-configured starting points for common dashboard types (analytics, CRM, project management, monitoring, social, e-commerce, etc.) with a fully functional real-time system monitoring dashboard included as a live demo
+- **Purpose**: Accelerates creation with intelligent defaults while remaining fully customizable, and demonstrates the platform's capabilities with a production-ready example
+- **Trigger**: User selects template from gallery, clicks the featured monitoring dashboard button, or specifies type in prompt
+- **Progression**: User browses templates → Selects template or loads monitoring demo → Describes customizations → AI adapts template → Dashboard generates
+- **Success criteria**: Templates cover 80% of common use cases and serve as good starting points; monitoring dashboard displays real-time updating metrics
 
 ### Real-Time Preview & Editing
 - **Functionality**: Live preview of generated dashboard with ability to make natural language edits
@@ -60,6 +60,13 @@ This is a meta-application that generates other applications dynamically. It req
 - **Trigger**: Dashboard generation completes
 - **Progression**: Dashboard created → System analyzes structure → Generates setup docs → User can view/copy instructions
 - **Success criteria**: Instructions are complete, accurate, and enable someone else to use/modify the dashboard
+
+### System Monitoring Dashboard (Pre-configured)
+- **Functionality**: Fully functional real-time system monitoring dashboard with live-updating metrics for CPU, memory, network, server status, and alerts
+- **Purpose**: Demonstrates platform capabilities and provides immediate value as a working example users can learn from and customize
+- **Trigger**: User clicks "Try System Monitoring Dashboard" button in empty state or featured card in templates
+- **Progression**: User clicks button → Dashboard loads instantly → Real-time metrics begin updating → User can save, export, or use as starting point
+- **Success criteria**: All metrics update smoothly in real-time, dashboard is immediately useful, and provides a clear example of what's possible
 
 ## Edge Case Handling
 
