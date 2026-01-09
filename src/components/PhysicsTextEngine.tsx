@@ -1,11 +1,11 @@
 import { useState, useEffect, useRef } from 'react'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Slider } from '@/components/ui/slider'
-import { Switch } from '@/components/ui/switch'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { Badge } from '@/components/ui/badge'
+import { Atom, Play, Pause, ArrowCounterClockwi
+
+  id: string
 import { Badge } from '@/components/ui/badge'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Atom, Play, Pause, ArrowCounterClockwise, Export, Cursor, Drop, Waves, Target } from '@phosphor-icons/react'
@@ -14,24 +14,24 @@ import { toast } from 'sonner'
 interface Particle {
   id: string
   char: string
-  x: number
-  y: number
-  vx: number
-  vy: number
-  mass: number
-  charge: number
-  color: string
-  fontSize: number
+  wind: num
+  groundFri
+}
+interface Pr
+  description:
+  icon: React.Re
+
+  {
 }
 
-interface PhysicsConfig {
-  gravity: number
-  elasticity: number
-  damping: number
-  repulsion: boolean
-  attraction: boolean
-  wind: number
-  turbulence: number
+      elasticity: 0.7,
+      repulsion: 
+      wind: 0,
+      groundFrict
+    }
+  {
+    descriptio
+    config: {
   groundFriction: number
   wallBounce: boolean
 }
@@ -40,33 +40,33 @@ interface Preset {
   name: string
   description: string
   config: PhysicsConfig
-  icon: React.ReactElement
+  icon: JSX.Element
 }
 
 const presets: Preset[] = [
-  {
+   
     name: 'Gentle Fall',
     description: 'Soft gravity with high elasticity',
     icon: <Drop size={20} weight="duotone" />,
     config: {
       gravity: 0.3,
-      elasticity: 0.7,
+      wind: 0.3,
       damping: 0.98,
       repulsion: false,
       attraction: false,
-      wind: 0,
+    descriptio
       turbulence: 0,
       groundFriction: 0.95,
       wallBounce: true
-    }
+     
   },
-  {
+   
     name: 'Bouncy Ball',
     description: 'High elasticity with medium gravity',
     icon: <Atom size={20} weight="duotone" />,
-    config: {
+  const [part
       gravity: 0.5,
-      elasticity: 0.9,
+  
       damping: 0.995,
       repulsion: false,
       attraction: false,
@@ -74,13 +74,13 @@ const presets: Preset[] = [
       turbulence: 0,
       groundFriction: 0.98,
       wallBounce: true
-    }
+
   },
-  {
+   
     name: 'Magnetic',
     description: 'Particles attract each other',
     icon: <Target size={20} weight="duotone" />,
-    config: {
+      vy: (Ma
       gravity: 0.2,
       elasticity: 0.5,
       damping: 0.97,
@@ -88,47 +88,47 @@ const presets: Preset[] = [
       attraction: true,
       wind: 0,
       turbulence: 0,
-      groundFriction: 0.9,
+  }
       wallBounce: true
     }
   },
-  {
+   
     name: 'Chaotic Storm',
-    description: 'High turbulence and wind',
+      const rect = canvas.getBoundingClientR
     icon: <Waves size={20} weight="duotone" />,
-    config: {
+      })
       gravity: 0.1,
       elasticity: 0.6,
       damping: 0.99,
       repulsion: false,
       attraction: false,
-      wind: 0.3,
+      return
       turbulence: 0.8,
       groundFriction: 0.85,
       wallBounce: true
-    }
+     
   },
-  {
+   
     name: 'Repulsion Field',
     description: 'Particles push away from each other',
     icon: <Atom size={20} weight="duotone" />,
-    config: {
+
       gravity: 0.4,
-      elasticity: 0.6,
+          }
       damping: 0.96,
-      repulsion: true,
+              if (othe
       attraction: false,
       wind: 0,
       turbulence: 0,
       groundFriction: 0.9,
       wallBounce: true
     }
-  }
+   
 ]
 
-export function PhysicsTextEngine() {
+            const distSq = dx * dx + 
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const animationRef = useRef<number | undefined>(undefined)
+              const force = 5 / distSq 
   const [text, setText] = useState('PHYSICS')
   const [particles, setParticles] = useState<Particle[]>([])
   const [isPlaying, setIsPlaying] = useState(false)
@@ -136,15 +136,15 @@ export function PhysicsTextEngine() {
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 })
   
   const [config, setConfig] = useState<PhysicsConfig>({
-    gravity: 0.5,
+          }
     elasticity: 0.7,
-    damping: 0.98,
+              x = 
     repulsion: false,
-    attraction: false,
+              x = canv
     wind: 0,
     turbulence: 0,
     groundFriction: 0.95,
-    wallBounce: true
+
   })
 
   const initializeParticles = (inputText: string) => {
@@ -158,31 +158,30 @@ export function PhysicsTextEngine() {
 
     return chars.map((char, i) => ({
       id: `${i}-${Date.now()}`,
-      char,
+
       x: startX + i * spacing,
-      y: startY,
+    animate()
       vx: (Math.random() - 0.5) * 2,
       vy: (Math.random() - 0.5) * 2,
       mass: 1,
       charge: Math.random() > 0.5 ? 1 : -1,
       color: `hsl(${(i / chars.length) * 360}, 70%, 60%)`,
-      fontSize: 48
+
     }))
-  }
+   
 
   const handleReset = () => {
     const newParticles = initializeParticles(text)
     setParticles(newParticles)
-  }
+   
 
   const applyPreset = (preset: Preset) => {
     setConfig(preset.config)
     toast.success(`Applied preset: ${preset.name}`)
   }
 
-  useEffect(() => {
-    const newParticles = initializeParticles(text)
-    setParticles(newParticles)
+          </Badge>
+    handleReset()
   }, [text])
 
   useEffect(() => {
@@ -191,23 +190,23 @@ export function PhysicsTextEngine() {
 
     const handleMouseMove = (e: MouseEvent) => {
       const rect = canvas.getBoundingClientRect()
-      setMousePos({
+                  <
         x: e.clientX - rect.left,
-        y: e.clientY - rect.top
+
       })
-    }
+     
 
     canvas.addEventListener('mousemove', handleMouseMove)
     return () => canvas.removeEventListener('mousemove', handleMouseMove)
-  }, [])
+        
 
-  useEffect(() => {
+                  <
     if (!isPlaying) {
       if (animationRef.current) {
         cancelAnimationFrame(animationRef.current)
-      }
+       
       return
-    }
+     
 
     const canvas = canvasRef.current
     const ctx = canvas?.getContext('2d')
@@ -223,9 +222,9 @@ export function PhysicsTextEngine() {
 
           vy += config.gravity / mass
 
-          if (config.wind !== 0) {
+              />
             vx += config.wind * 0.1
-          }
+          <
 
           if (config.turbulence > 0) {
             vx += (Math.random() - 0.5) * config.turbulence
@@ -257,24 +256,24 @@ export function PhysicsTextEngine() {
             const distSq = dx * dx + dy * dy
             const dist = Math.sqrt(distSq)
 
-            if (dist > 0 && dist < 300) {
+                    </span>
               const force = 5 / distSq * 10000
-              vx += (dx / dist) * force
+                    onValueChange={([v]
               vy += (dy / dist) * force
-            }
+             
           }
 
           vx *= config.damping
-          vy *= config.damping
+                      {config.
 
-          x += vx
+                 
           y += vy
 
           if (y + particle.fontSize / 2 >= canvas.height) {
             y = canvas.height - particle.fontSize / 2
             vy *= -config.elasticity
-            vx *= config.groundFriction
-          }
+                    <span className="te
+           
 
           if (config.wallBounce) {
             if (x - particle.fontSize / 2 <= 0) {
@@ -297,7 +296,7 @@ export function PhysicsTextEngine() {
         updated.forEach(particle => {
           ctx.save()
           ctx.font = `bold ${particle.fontSize}px 'Space Grotesk', sans-serif`
-          ctx.fillStyle = particle.color
+                    </Label>
           ctx.textAlign = 'center'
           ctx.textBaseline = 'middle'
           ctx.shadowColor = particle.color
@@ -309,7 +308,7 @@ export function PhysicsTextEngine() {
         if (cursorAttraction && mousePos.x > 0) {
           ctx.beginPath()
           ctx.arc(mousePos.x, mousePos.y, 10, 0, Math.PI * 2)
-          ctx.fillStyle = 'rgba(117, 255, 220, 0.3)'
+                          {preset.description}
           ctx.fill()
           ctx.strokeStyle = 'rgba(117, 255, 220, 0.8)'
           ctx.lineWidth = 2
@@ -317,7 +316,7 @@ export function PhysicsTextEngine() {
         }
 
         return updated
-      })
+        
 
       animationRef.current = requestAnimationFrame(animate)
     }
@@ -325,15 +324,15 @@ export function PhysicsTextEngine() {
     animate()
 
     return () => {
-      if (animationRef.current) {
+              <div className="tex
         cancelAnimationFrame(animationRef.current)
-      }
+       
     }
   }, [isPlaying, config, cursorAttraction, mousePos])
 
-  const handleExport = () => {
+              <div className="
     const canvas = canvasRef.current
-    if (!canvas) return
+        </div>
 
     canvas.toBlob(blob => {
       if (!blob) return
@@ -345,9 +344,9 @@ export function PhysicsTextEngine() {
       URL.revokeObjectURL(url)
       toast.success('Frame exported!')
     })
-  }
 
-  return (
+
+
     <Card className="border-2 border-accent/30">
       <CardHeader>
         <div className="flex items-start justify-between">
@@ -355,7 +354,7 @@ export function PhysicsTextEngine() {
             <CardTitle className="flex items-center gap-2 text-2xl">
               <Atom size={28} weight="duotone" className="text-accent" />
               Physics-Based Text Engine
-            </CardTitle>
+
             <CardDescription className="mt-2">
               Gravity, elasticity, damping, and force simulation
             </CardDescription>
@@ -363,7 +362,7 @@ export function PhysicsTextEngine() {
           <Badge variant="outline" className="bg-accent/10 text-accent border-accent">
             Real-time Physics
           </Badge>
-        </div>
+
       </CardHeader>
       <CardContent className="space-y-6">
         <div className="grid lg:grid-cols-3 gap-6">
@@ -385,7 +384,7 @@ export function PhysicsTextEngine() {
                   </div>
                 </div>
               )}
-            </div>
+
 
             <div className="flex items-center gap-2">
               <Button
@@ -397,19 +396,19 @@ export function PhysicsTextEngine() {
                   <>
                     <Pause size={20} weight="fill" className="mr-2" />
                     Pause
-                  </>
+
                 ) : (
                   <>
                     <Play size={20} weight="fill" className="mr-2" />
                     Play
                   </>
-                )}
+
               </Button>
-              <Button
+
                 onClick={handleReset}
-                variant="outline"
+
                 size="lg"
-              >
+
                 <ArrowCounterClockwise size={20} />
               </Button>
               <Button
@@ -419,18 +418,18 @@ export function PhysicsTextEngine() {
               >
                 <Export size={20} />
               </Button>
-            </div>
 
-            <div className="space-y-2">
+
+
               <Label htmlFor="physics-text">Text Content</Label>
-              <Input
+
                 id="physics-text"
                 value={text}
                 onChange={e => setText(e.target.value.toUpperCase())}
                 placeholder="Enter text..."
                 className="font-bold text-lg"
-              />
-            </div>
+
+
 
             <div className="flex items-center gap-4 p-4 bg-muted/50 rounded-lg border border-border">
               <Cursor size={24} weight="duotone" className="text-accent" />
@@ -439,235 +438,235 @@ export function PhysicsTextEngine() {
                   Cursor Attraction
                 </Label>
                 <p className="text-xs text-muted-foreground">
-                  Move mouse to attract particles
-                </p>
-              </div>
-              <Switch
-                id="cursor-attraction"
-                checked={cursorAttraction}
-                onCheckedChange={setCursorAttraction}
-              />
-            </div>
-          </div>
 
-          <div className="space-y-4">
-            <Tabs defaultValue="physics" className="w-full">
-              <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="physics">Physics</TabsTrigger>
-                <TabsTrigger value="presets">Presets</TabsTrigger>
+
+
+
+
+
+
+
+            </div>
+
+
+
+
+
+
+
               </TabsList>
 
-              <TabsContent value="physics" className="space-y-4 mt-4">
-                <div className="space-y-2">
-                  <Label className="flex items-center justify-between">
-                    <span>Gravity</span>
-                    <span className="text-xs text-muted-foreground font-mono">
-                      {config.gravity.toFixed(2)}
-                    </span>
-                  </Label>
+
+
+
+
+
+
+
+
                   <Slider
-                    value={[config.gravity]}
-                    onValueChange={([v]) => setConfig(prev => ({ ...prev, gravity: v }))}
-                    min={0}
+
+
+
                     max={2}
-                    step={0.05}
-                    className="py-2"
-                  />
+
+
+
                 </div>
 
-                <div className="space-y-2">
-                  <Label className="flex items-center justify-between">
+
+
                     <span>Elasticity</span>
-                    <span className="text-xs text-muted-foreground font-mono">
-                      {config.elasticity.toFixed(2)}
-                    </span>
-                  </Label>
-                  <Slider
-                    value={[config.elasticity]}
-                    onValueChange={([v]) => setConfig(prev => ({ ...prev, elasticity: v }))}
+
+
+
+
+
+
+
                     min={0}
-                    max={1}
+
                     step={0.05}
-                    className="py-2"
-                  />
-                </div>
 
-                <div className="space-y-2">
-                  <Label className="flex items-center justify-between">
-                    <span>Damping</span>
-                    <span className="text-xs text-muted-foreground font-mono">
-                      {config.damping.toFixed(3)}
-                    </span>
-                  </Label>
-                  <Slider
-                    value={[config.damping]}
-                    onValueChange={([v]) => setConfig(prev => ({ ...prev, damping: v }))}
-                    min={0.9}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                     max={1}
-                    step={0.001}
+
                     className="py-2"
-                  />
+
                 </div>
 
                 <div className="space-y-2">
-                  <Label className="flex items-center justify-between">
+
                     <span>Wind</span>
-                    <span className="text-xs text-muted-foreground font-mono">
-                      {config.wind.toFixed(2)}
-                    </span>
+
+
+
                   </Label>
-                  <Slider
+
                     value={[config.wind]}
-                    onValueChange={([v]) => setConfig(prev => ({ ...prev, wind: v }))}
+
                     min={-1}
-                    max={1}
+
                     step={0.05}
-                    className="py-2"
-                  />
+
+
+
+
+
+
+
+
+
+                    </span>
+
+
+
+
+
+
+
+
+
                 </div>
 
                 <div className="space-y-2">
-                  <Label className="flex items-center justify-between">
-                    <span>Turbulence</span>
-                    <span className="text-xs text-muted-foreground font-mono">
-                      {config.turbulence.toFixed(2)}
-                    </span>
-                  </Label>
-                  <Slider
-                    value={[config.turbulence]}
-                    onValueChange={([v]) => setConfig(prev => ({ ...prev, turbulence: v }))}
-                    min={0}
-                    max={2}
-                    step={0.05}
-                    className="py-2"
-                  />
-                </div>
 
-                <div className="space-y-2">
-                  <Label className="flex items-center justify-between">
-                    <span>Ground Friction</span>
-                    <span className="text-xs text-muted-foreground font-mono">
-                      {config.groundFriction.toFixed(2)}
-                    </span>
-                  </Label>
-                  <Slider
-                    value={[config.groundFriction]}
-                    onValueChange={([v]) => setConfig(prev => ({ ...prev, groundFriction: v }))}
+
+
+
+
+
+
+
+
                     min={0.5}
-                    max={1}
+
                     step={0.01}
-                    className="py-2"
+
                   />
-                </div>
 
-                <div className="pt-4 space-y-3 border-t border-border">
-                  <div className="flex items-center justify-between">
-                    <Label htmlFor="repulsion" className="text-sm">
+
+
+
+
                       Repulsion Force
-                    </Label>
+
                     <Switch
-                      id="repulsion"
-                      checked={config.repulsion}
-                      onCheckedChange={(v) => setConfig(prev => ({ 
-                        ...prev, 
-                        repulsion: v,
-                        attraction: v ? false : prev.attraction 
-                      }))}
+
+
+
+
+
+
+
                     />
                   </div>
 
-                  <div className="flex items-center justify-between">
-                    <Label htmlFor="attraction" className="text-sm">
-                      Attraction Force
-                    </Label>
-                    <Switch
-                      id="attraction"
-                      checked={config.attraction}
-                      onCheckedChange={(v) => setConfig(prev => ({ 
-                        ...prev, 
-                        attraction: v,
-                        repulsion: v ? false : prev.repulsion 
-                      }))}
-                    />
-                  </div>
 
-                  <div className="flex items-center justify-between">
-                    <Label htmlFor="wall-bounce" className="text-sm">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                       Wall Bounce
-                    </Label>
-                    <Switch
-                      id="wall-bounce"
-                      checked={config.wallBounce}
-                      onCheckedChange={(v) => setConfig(prev => ({ ...prev, wallBounce: v }))}
-                    />
-                  </div>
-                </div>
-              </TabsContent>
 
-              <TabsContent value="presets" className="space-y-3 mt-4">
+                    <Switch
+
+
+
+                    />
+
+                </div>
+
+
+
                 {presets.map((preset, i) => (
-                  <button
-                    key={i}
-                    onClick={() => applyPreset(preset)}
-                    className="w-full p-4 rounded-lg border-2 border-border hover:border-accent bg-card hover:bg-accent/5 transition-all text-left"
-                  >
-                    <div className="flex items-start gap-3">
-                      <div className="w-10 h-10 rounded-lg bg-accent/20 flex items-center justify-center flex-shrink-0">
+
+
+
+
+
+
+
                         {preset.icon}
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="font-semibold text-sm mb-1">{preset.name}</div>
-                        <div className="text-xs text-muted-foreground">
-                          {preset.description}
+
+
+
+
+
                         </div>
-                      </div>
-                    </div>
-                  </button>
+
+
+
                 ))}
-              </TabsContent>
+
             </Tabs>
 
-            <div className="p-4 bg-muted/50 rounded-lg border border-border space-y-2">
-              <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
-                Particle Stats
-              </div>
-              <div className="grid grid-cols-2 gap-2 text-sm">
-                <div>
-                  <div className="text-xs text-muted-foreground">Count</div>
-                  <div className="font-mono font-bold">{particles.length}</div>
-                </div>
-                <div>
-                  <div className="text-xs text-muted-foreground">Status</div>
-                  <div className="font-mono font-bold">
-                    {isPlaying ? '▶ Playing' : '⏸ Paused'}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
 
-        <div className="pt-4 border-t border-border">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
-            <div className="p-3 bg-muted/50 rounded-lg">
-              <div className="text-xs text-muted-foreground mb-1">Gravity</div>
-              <div className="font-bold">Downward force on particles</div>
-            </div>
-            <div className="p-3 bg-muted/50 rounded-lg">
-              <div className="text-xs text-muted-foreground mb-1">Elasticity</div>
-              <div className="font-bold">Bounce strength on collision</div>
-            </div>
-            <div className="p-3 bg-muted/50 rounded-lg">
-              <div className="text-xs text-muted-foreground mb-1">Damping</div>
-              <div className="font-bold">Velocity decay over time</div>
-            </div>
-            <div className="p-3 bg-muted/50 rounded-lg">
-              <div className="text-xs text-muted-foreground mb-1">Forces</div>
-              <div className="font-bold">Inter-particle interactions</div>
-            </div>
+
+
+
+
+
+
+
+
+
+
+
+                    {isPlaying ? '▶ Playing' : '⏸ Paused'}
+
+
+
+
           </div>
-        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
       </CardContent>
-    </Card>
-  )
-}
+
+
+
