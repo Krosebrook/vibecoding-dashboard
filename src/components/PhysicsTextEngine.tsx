@@ -1,36 +1,36 @@
 import { useState, useEffect, useRef } from 'react'
-import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { Card, CardContent, CardDescription, 
 import { Badge } from '@/components/ui/badge'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Label } from '@/components/ui/label'
-import { Slider } from '@/components/ui/slider'
-import { Switch } from '@/components/ui/switch'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { Atom, Play, Pause, ArrowCounterClockwi
+
+  id: string
+import { Atom, Play, Pause, ArrowCounterClockwise, Export, Cursor, Drop, Waves, Target } from '@phosphor-icons/react'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Atom, Play, Pause, ArrowCounterClockwise, Export, Cursor, Drop, Waves, Target } from '@phosphor-icons/react'
 import { toast } from 'sonner'
 
 interface Particle {
   id: string
   char: string
-  x: number
-  y: number
-  vx: number
-  vy: number
-  mass: number
-  charge: number
-  fontSize: number
-  color: string
+  wind: num
+  groundFri
+}
+interface Pr
+  description:
+  icon: React.Re
+
+  {
 }
 
-interface PhysicsConfig {
-  gravity: number
-  elasticity: number
-  damping: number
-  repulsion: boolean
-  attraction: boolean
-  wind: number
-  turbulence: number
+      elasticity: 0.7,
+      repulsion: 
+      wind: 0,
+      groundFrict
+    }
+  {
+    descriptio
+    config: {
   groundFriction: number
   wallBounce: boolean
 }
@@ -39,33 +39,33 @@ interface Preset {
   name: string
   description: string
   config: PhysicsConfig
-  icon: React.ReactElement
+  icon: JSX.Element
 }
 
 const presets: Preset[] = [
-  {
+   
     name: 'Gentle Fall',
     description: 'Soft gravity with high elasticity',
     icon: <Drop size={20} weight="duotone" />,
     config: {
       gravity: 0.3,
-      elasticity: 0.7,
+      wind: 0.3,
       damping: 0.98,
       repulsion: false,
       attraction: false,
-      wind: 0,
+    descriptio
       turbulence: 0,
       groundFriction: 0.95,
       wallBounce: true
-    }
+     
   },
-  {
+   
     name: 'Bouncy Ball',
     description: 'High elasticity with medium gravity',
     icon: <Atom size={20} weight="duotone" />,
-    config: {
+  const [part
       gravity: 0.5,
-      elasticity: 0.9,
+  
       damping: 0.995,
       repulsion: false,
       attraction: false,
@@ -73,13 +73,13 @@ const presets: Preset[] = [
       turbulence: 0,
       groundFriction: 0.98,
       wallBounce: true
-    }
+
   },
-  {
+   
     name: 'Magnetic',
     description: 'Particles attract each other',
     icon: <Target size={20} weight="duotone" />,
-    config: {
+      vy: (Ma
       gravity: 0.2,
       elasticity: 0.5,
       damping: 0.97,
@@ -87,47 +87,47 @@ const presets: Preset[] = [
       attraction: true,
       wind: 0,
       turbulence: 0,
-      groundFriction: 0.9,
+  }
       wallBounce: true
     }
   },
-  {
+   
     name: 'Chaotic Storm',
-    description: 'High turbulence and wind',
+      const rect = canvas.getBoundingClientR
     icon: <Waves size={20} weight="duotone" />,
-    config: {
+      })
       gravity: 0.1,
       elasticity: 0.6,
       damping: 0.99,
       repulsion: false,
       attraction: false,
-      wind: 0.5,
+      return
       turbulence: 0.8,
       groundFriction: 0.85,
       wallBounce: true
-    }
+     
   },
-  {
+   
     name: 'Repulsion Field',
     description: 'Particles push away from each other',
     icon: <Atom size={20} weight="duotone" />,
-    config: {
+
       gravity: 0.4,
-      elasticity: 0.7,
+          }
       damping: 0.96,
-      repulsion: true,
+              if (othe
       attraction: false,
       wind: 0,
       turbulence: 0,
       groundFriction: 0.9,
       wallBounce: true
     }
-  }
+   
 ]
 
-export function PhysicsTextEngine() {
+            const distSq = dx * dx + 
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const animationRef = useRef<number>(0)
+              const force = 5 / distSq 
   const [text, setText] = useState('PHYSICS')
   const [particles, setParticles] = useState<Particle[]>([])
   const [isPlaying, setIsPlaying] = useState(false)
@@ -135,15 +135,15 @@ export function PhysicsTextEngine() {
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 })
   
   const [config, setConfig] = useState<PhysicsConfig>({
-    gravity: 0.4,
+          }
     elasticity: 0.7,
-    damping: 0.99,
+              x = 
     repulsion: false,
-    attraction: false,
+              x = canv
     wind: 0,
     turbulence: 0,
     groundFriction: 0.95,
-    wallBounce: true
+
   })
 
   const initializeParticles = (inputText: string) => {
@@ -157,12 +157,10 @@ export function PhysicsTextEngine() {
 
     return chars.map((char, i) => ({
       id: `${i}-${Date.now()}`,
-      char,
+
       x: startX + i * spacing,
-      y: startY,
+    animate()
       vx: (Math.random() - 0.5) * 2,
-      vy: (Math.random() - 0.5) * 2,
-      mass: 1,
       charge: Math.random() > 0.5 ? 1 : -1,
       fontSize: 48,
       color: `hsl(${(i / chars.length) * 360}, 70%, 60%)`
