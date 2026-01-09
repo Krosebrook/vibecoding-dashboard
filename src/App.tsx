@@ -7,7 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Badge } from '@/components/ui/badge'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import { Sparkle, Layout, Code, Eye, Plus, Download, Check, Warning, Monitor, ChartLine, CurrencyDollar, ShareNetwork, ChartBar, Palette } from '@phosphor-icons/react'
+import { Sparkle, Layout, Code, Eye, Plus, Download, Check, Warning, Monitor, ChartLine, CurrencyDollar, ShareNetwork, ChartBar, Palette, Lightning } from '@phosphor-icons/react'
 import { DashboardConfig, GenerationProgress, DashboardTemplate } from '@/lib/types'
 import { generateDashboard, refineDashboard, generateSetupInstructions } from '@/lib/dashboard-generator'
 import { dashboardTemplates } from '@/lib/templates'
@@ -26,11 +26,13 @@ import { WebhookTransformManager } from '@/components/WebhookTransformManager'
 import { TransformPatternLibrary } from '@/components/TransformPatternLibrary'
 import { AITransformQuickStart } from '@/components/AITransformQuickStart'
 import { VisualPatternBuilder } from '@/components/VisualPatternBuilder'
+import { AnimationPresetsLibrary } from '@/components/AnimationPresetsLibrary'
+import { ChoreographyBuilder } from '@/components/ChoreographyBuilder'
 import { toast } from 'sonner'
 import { motion, AnimatePresence } from 'framer-motion'
 
 function App() {
-  const [viewMode, setViewMode] = useState<'dashboard' | 'pattern'>('dashboard')
+  const [viewMode, setViewMode] = useState<'dashboard' | 'pattern' | 'animation'>('dashboard')
   const [prompt, setPrompt] = useState('')
   const [selectedTemplate, setSelectedTemplate] = useState<DashboardTemplate | undefined>()
   const [isGenerating, setIsGenerating] = useState(false)
@@ -171,16 +173,18 @@ function App() {
               <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center">
                 {viewMode === 'dashboard' ? (
                   <Sparkle size={24} weight="fill" className="text-primary-foreground" />
-                ) : (
+                ) : viewMode === 'pattern' ? (
                   <Palette size={24} weight="fill" className="text-primary-foreground" />
+                ) : (
+                  <Lightning size={24} weight="fill" className="text-primary-foreground" />
                 )}
               </div>
               <div>
                 <h1 className="text-2xl font-bold tracking-tight">
-                  {viewMode === 'dashboard' ? 'Dashboard VibeCoder' : 'Visual Pattern Builder'}
+                  {viewMode === 'dashboard' ? 'Dashboard VibeCoder' : viewMode === 'pattern' ? 'Visual Pattern Builder' : 'Animation Presets'}
                 </h1>
                 <p className="text-sm text-muted-foreground">
-                  {viewMode === 'dashboard' ? 'AI-Powered Dashboard Generator' : 'Drag-and-drop pattern design system'}
+                  {viewMode === 'dashboard' ? 'AI-Powered Dashboard Generator' : viewMode === 'pattern' ? 'Drag-and-drop pattern design system' : 'Multi-element choreography library'}
                 </p>
               </div>
             </div>
@@ -200,6 +204,14 @@ function App() {
               >
                 <Palette size={16} className="mr-2" />
                 Patterns
+              </Button>
+              <Button
+                variant={viewMode === 'animation' ? 'default' : 'outline'}
+                size="sm"
+                onClick={() => setViewMode('animation')}
+              >
+                <Lightning size={16} className="mr-2" />
+                Animations
               </Button>
               {viewMode === 'dashboard' && currentDashboard && (
                 <>
@@ -236,6 +248,11 @@ function App() {
 
       {viewMode === 'pattern' ? (
         <VisualPatternBuilder />
+      ) : viewMode === 'animation' ? (
+        <div className="container mx-auto px-6 py-8 space-y-6">
+          <AnimationPresetsLibrary />
+          <ChoreographyBuilder />
+        </div>
       ) : (
       <>
       <div className="container mx-auto px-6 py-8">

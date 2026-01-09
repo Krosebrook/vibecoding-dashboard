@@ -117,6 +117,20 @@ This is a meta-application that generates other applications dynamically. It req
 - **Progression**: User enters pattern view → Describes desired pattern to AI or selects template → AI generates pattern with multiple elements or template loads → User adds/removes elements using visual picker → Adjusts properties with sliders and inputs (color, opacity, blend mode, etc.) → Real-time preview updates instantly → User reorders layers, duplicates elements, experiments with blend modes → Saves pattern to library → Exports as CSS with base64 background or JSON config for sharing/backup → Applies pattern to dashboard backgrounds
 - **Success criteria**: AI generates visually appealing patterns from descriptions 85%+ of the time, all 14 element types render correctly at 60fps, property changes reflect instantly without lag, export CSS works in any web project, saved patterns persist across sessions, templates provide good starting points for common design needs, and users can create production-ready patterns in under 5 minutes
 
+### Animation Presets Library
+- **Functionality**: Comprehensive library of 30+ production-ready animation presets across 6 categories (entrance, exit, attention, choreography, interaction, transformation) with 4 complexity levels (simple, moderate, complex, advanced), multiple orchestration types (parallel, sequence, stagger, cascade, wave), visual preview system, code generation, and export capabilities
+- **Purpose**: Provide designers and developers with professional, reusable animation sequences that eliminate the need to hand-craft complex animations, enabling sophisticated multi-element choreography with precise timing controls
+- **Trigger**: User switches to "Animations" view from main navigation, browses preset library, or searches for specific animation type
+- **Progression**: User enters animation view → Browses by category/complexity → Previews animations on hover → Selects preset to view details → Adjusts stagger timing and element count in playground → Clicks play to preview → Copies Framer Motion code or exports JSON config → Integrates into dashboard or project
+- **Success criteria**: All 30+ presets preview smoothly at 60fps, code generation produces valid Framer Motion syntax, stagger configurations work correctly with 1-12 elements, exported JSON can be reimported, and users can find appropriate animations in under 30 seconds
+
+### Choreography Builder
+- **Functionality**: Advanced visual timeline editor for creating complex multi-element animation sequences with step-by-step configuration, preset chaining, custom timing controls (delay, duration), element targeting, reordering tools, live preview, and export to JSON choreography configs
+- **Purpose**: Enable creation of sophisticated animation sequences that orchestrate multiple elements with precise timing, perfect for onboarding flows, storytelling, hero sections, and complex UI transitions
+- **Trigger**: User scrolls to choreography builder in animations view, clicks "Add Step" to begin sequence
+- **Progression**: User names choreography → Adds first animation step → Selects preset from dropdown → Specifies target element IDs → Adjusts delay/duration sliders → Adds more steps with different presets → Reorders steps in timeline → Previews complete sequence → Exports JSON config → Integrates choreography into application code
+- **Success criteria**: Timeline displays all steps clearly, drag reordering works smoothly, live preview plays complete sequence accurately, exported configs are valid, users can create 5+ step choreographies without confusion, and sequences can include any combination of presets
+
 ## Edge Case Handling
 
 - **Ambiguous Prompts**: System asks clarifying questions before generating, suggests multiple interpretations
@@ -149,6 +163,11 @@ This is a meta-application that generates other applications dynamically. It req
 - **Invalid JavaScript in Generated Functions**: Generated code is syntax-checked before presentation; if invalid, regenerates with stricter validation
 - **Conflicting Transform Logic**: AI identifies logical conflicts (e.g., filtering and mapping same field differently) and warns user in suggestions
 - **No Sample Payload Available**: AI generates transforms based purely on description with generic field types and includes note about testing with real data
+- **Animation Performance on Weak Devices**: System detects low frame rates and automatically simplifies animations or disables complex effects
+- **Infinite Loop Animations**: All infinite animations include pause controls and respect prefers-reduced-motion browser settings
+- **Too Many Simultaneous Animations**: Choreography builder warns when more than 20 elements animate simultaneously and suggests staggering
+- **Animation Timing Conflicts**: When steps overlap in choreography, system displays warning and suggests adjusting delays
+- **Missing Animation Elements**: If element IDs don't exist in DOM, animations fail gracefully without breaking page
 
 ## Design Direction
 
