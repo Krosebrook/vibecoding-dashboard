@@ -89,6 +89,13 @@ This is a meta-application that generates other applications dynamically. It req
 - **Progression**: User browses connector library → Selects pre-configured connector or creates custom → Configures URL, auth, params → Tests connection → Views live data in chart/table → Data auto-refreshes based on interval → Can drill down to fetch related data → Cache manages performance → Custom connectors persist for reuse
 - **Success criteria**: Pre-configured connectors work out-of-box, custom connectors can be created in under 2 minutes, caching reduces redundant requests by 80%+, rate limiting prevents API abuse, authentication works for all common types, data transforms correctly, drill-down fetches related data seamlessly, and errors provide actionable feedback
 
+### Webhook Connectors
+- **Functionality**: Real-time push data reception from external services with 10+ pre-configured webhook templates (GitHub, Stripe, Slack, Shopify, Twilio, SendGrid, Discord, Zapier, Webhook.site, Custom), visual webhook manager with endpoint URLs, event buffering and viewing, test/simulate functionality, multiple auth types (signature verification, secrets, bearer tokens), automatic event processing, and integration with dashboard visualizations
+- **Purpose**: Enable dashboards to receive instant real-time data pushes from external services instead of polling, creating truly reactive applications that update immediately when events occur in connected systems
+- **Trigger**: User creates webhook from template library, copies endpoint URL, configures in external service
+- **Progression**: User clicks create webhook → Selects provider template (GitHub/Stripe/etc) → System generates unique endpoint → User copies URL → Configures in external service → External events trigger webhook → Events appear in buffer → Dashboard updates in real-time → User can view event history, test with simulator, or integrate event data into charts/visualizations
+- **Success criteria**: Webhook endpoints are instantly accessible, events buffer correctly with no data loss, signature verification works for all provider types, test simulator accurately mimics real events, event viewer displays readable payloads, integration with dashboard charts is seamless, and webhooks persist across sessions
+
 ## Edge Case Handling
 
 - **Ambiguous Prompts**: System asks clarifying questions before generating, suggests multiple interpretations
@@ -107,6 +114,11 @@ This is a meta-application that generates other applications dynamically. It req
 - **Authentication Errors**: System validates credentials before first request and provides clear instructions for obtaining API keys
 - **CORS Issues**: Public API connectors are pre-tested for browser compatibility; custom connectors warn about potential CORS restrictions
 - **Stale Data**: Visual indicators show data age and last refresh time; manual refresh always available
+- **Webhook Signature Failures**: System logs authentication failures separately and provides debugging information for signature mismatches
+- **Webhook Buffer Overflow**: Event buffers automatically trim to size limit (default 100), keeping most recent events
+- **Duplicate Webhook Events**: Event IDs prevent duplicate processing when external services retry delivery
+- **Malformed Webhook Payloads**: Validation functions catch malformed data before processing; errors logged with payload examples
+- **Webhook Endpoint Collisions**: System generates unique endpoint identifiers preventing URL conflicts
 
 ## Design Direction
 

@@ -20,6 +20,8 @@ import { DashboardPreview } from '@/components/DashboardPreview'
 import { DrillDownGuide } from '@/components/DrillDownGuide'
 import { DataConnectorManager } from '@/components/DataConnectorManager'
 import { ConnectorDrillDownDemo } from '@/components/ConnectorDrillDownDemo'
+import { WebhookManager } from '@/components/WebhookManager'
+import { WebhookQuickStart } from '@/components/WebhookQuickStart'
 import { toast } from 'sonner'
 import { motion, AnimatePresence } from 'framer-motion'
 
@@ -315,6 +317,10 @@ function App() {
             <DrillDownGuide />
 
             <ConnectorDrillDownDemo />
+
+            <WebhookQuickStart />
+
+            <WebhookManager />
 
             <DataConnectorManager />
 
