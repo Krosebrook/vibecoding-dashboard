@@ -1,5 +1,5 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-
+import { Atom } from '@phosphor-icons/react'
 
 export function PhysicsTextEngine() {
   return (
@@ -10,13 +10,11 @@ export function PhysicsTextEngine() {
           Physics Text Engine
         </CardTitle>
         <CardDescription>
+          Component under construction
+        </CardDescription>
+      </CardHeader>
       <CardContent>
-          Component under 
-      </CardContent
-  )
-
-
-
+        Physics-based text animation engine coming soon
       </CardContent>
     </Card>
   )
