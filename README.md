@@ -2,6 +2,22 @@
 
 An AI-powered dashboard generator that transforms natural language descriptions into production-ready, fully functional dashboards with real-time data connectors and webhook integrations.
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.7-blue)](https://www.typescriptlang.org/)
+[![React](https://img.shields.io/badge/React-19-blue)](https://react.dev/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind-v4-blue)](https://tailwindcss.com/)
+
+> **"VibeCoding"** - Describe any dashboard in natural language and watch it materialize into production-ready code.
+
+## 📚 Documentation
+
+- **[Getting Started](#-getting-started)** - Quick start guide
+- **[Architecture Guide](./ARCHITECTURE.md)** - System architecture and technical design
+- **[API Reference](./API.md)** - Complete API documentation
+- **[Development Guide](./DEVELOPMENT.md)** - Contributor and development guide
+- **[Product Roadmap](./ROADMAP.md)** - Future plans and feature timeline
+- **[PRD](./PRD.md)** - Product requirements document
+
 ## 🚀 Features
 
 ### Core Capabilities
@@ -135,17 +151,32 @@ top products, and recent orders
 - **State**: React Hooks + Spark KV Storage
 - **Build**: Vite
 
-## 📚 Documentation
+## 📖 Additional Documentation
 
-- [PRD.md](./PRD.md) - Product Requirements Document
+### Core Documentation
+- **[ARCHITECTURE.md](./ARCHITECTURE.md)** - System architecture and technical design
+- **[API.md](./API.md)** - Complete API reference for all modules
+- **[DEVELOPMENT.md](./DEVELOPMENT.md)** - Development and contribution guide
+- **[ROADMAP.md](./ROADMAP.md)** - Product roadmap and future plans
+- **[CHANGELOG.md](./CHANGELOG.md)** - Version history and release notes
+- **[CONTRIBUTING.md](./CONTRIBUTING.md)** - How to contribute to the project
+
+### Feature Guides
 - [DATA_CONNECTORS.md](./DATA_CONNECTORS.md) - API Connector Guide
 - [WEBHOOKS.md](./WEBHOOKS.md) - Webhook Integration Guide
-- [ANIMATION_RECORDING.md](./ANIMATION_RECORDING.md) - Animation Recording Mode Guide
-- [PATTERN_BUILDER.md](./PATTERN_BUILDER.md) - Visual Pattern Builder Guide
-- [ANIMATION_PRESETS.md](./ANIMATION_PRESETS.md) - Animation Presets Library
 - [PAYLOAD_TRANSFORMS.md](./PAYLOAD_TRANSFORMS.md) - Webhook Transform Guide
 - [TRANSFORM_PATTERNS.md](./TRANSFORM_PATTERNS.md) - Transform Pattern Library
 - [AI_TRANSFORM_README.md](./AI_TRANSFORM_README.md) - AI Transform Generator
+
+### Animation Guides
+- [ANIMATION_RECORDING.md](./ANIMATION_RECORDING.md) - Animation Recording Mode
+- [PATTERN_BUILDER.md](./PATTERN_BUILDER.md) - Visual Pattern Builder
+- [ANIMATION_PRESETS.md](./ANIMATION_PRESETS.md) - Animation Presets Library
+- [PHYSICS_TEXT_ENGINE.md](./PHYSICS_TEXT_ENGINE.md) - Physics-Based Text Animation
+
+### Other
+- [SECURITY.md](./SECURITY.md) - Security practices and policies
+- [PRD.md](./PRD.md) - Product Requirements Document
 
 ## 🎨 Architecture
 
@@ -176,6 +207,35 @@ This Spark application is production-ready and fully functional. To extend:
 3. Build custom dashboard components in `src/components/`
 4. Extend chart types in dashboard preview renderer
 
+## 🤝 Contributing
+
+We welcome contributions! Please see [CONTRIBUTING.md](./CONTRIBUTING.md) for:
+- Code of conduct
+- Development setup
+- Coding standards
+- Pull request process
+- How to report bugs
+- How to suggest features
+
+## 📝 Version History
+
+See [CHANGELOG.md](./CHANGELOG.md) for detailed version history and release notes.
+
+Current version: **1.0.0**
+
 ## 📄 License
 
 The Spark Template files and resources from GitHub are licensed under the terms of the MIT license, Copyright GitHub, Inc.
+
+## 🌟 Acknowledgments
+
+Built with:
+- [React](https://react.dev/) - UI framework
+- [TypeScript](https://www.typescriptlang.org/) - Type safety
+- [Tailwind CSS](https://tailwindcss.com/) - Styling
+- [shadcn/ui](https://ui.shadcn.com/) - Component library
+- [Framer Motion](https://www.framer.com/motion/) - Animations
+- [Recharts](https://recharts.org/) - Data visualization
+- [Spark Platform](https://github.com/) - Runtime and SDK
+
+Special thanks to all contributors who have helped make Dashboard VibeCoder possible!
