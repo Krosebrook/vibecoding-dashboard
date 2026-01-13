@@ -4,12 +4,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 export function PhysicsTextEngine() {
   return (
     <Card>
-          Componen
-      </CardHeader>
-        Physics-based text animation engine coming soon
-    </Card>
-}
-
+      <CardHeader>
+        <CardTitle>Physics Text Engine</CardTitle>
+        <CardDescription>
           Component under construction
         </CardDescription>
       </CardHeader>
