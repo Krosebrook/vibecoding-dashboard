@@ -117,11 +117,11 @@ function App() {
             <ConnectionManager
               connections={connections || []}
               onConnectionsChange={setConnections}
-            />
-
-            <div className="grid lg:grid-cols-2 gap-6">
-              <Card className="p-6">
-                <h3 className="text-lg font-semibold mb-4">Source Database</h3>
+                ) : (
+                  <div className="text-center py-8 text-muted-foreground">
+                    <Database size={32} className="mx-auto mb-2 opacity-50" weight="duotone" />
+                    <p className="text-sm">Select a source connection from above</p>
+                  </div>
                 {sourceConnection ? (
                   <div className="p-4 bg-muted rounded-lg">
                     <div className="flex items-center justify-between">
