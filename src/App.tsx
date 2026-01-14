@@ -20,6 +20,7 @@ import { DashboardPreview } from '@/components/DashboardPreview'
 import { DrillDownGuide } from '@/components/DrillDownGuide'
 import { DataConnectorManager } from '@/components/DataConnectorManager'
 import { ConnectorDrillDownDemo } from '@/components/ConnectorDrillDownDemo'
+import { DatabaseConnectorManager } from '@/components/DatabaseConnectorManager'
 import { WebhookManager } from '@/components/WebhookManager'
 import { WebhookQuickStart } from '@/components/WebhookQuickStart'
 import { WebhookTransformManager } from '@/components/WebhookTransformManager'
@@ -403,6 +404,8 @@ function App() {
             <TransformPatternLibrary />
 
             <DataConnectorManager />
+
+            <DatabaseConnectorManager />
 
             <Card>
               <CardHeader>
