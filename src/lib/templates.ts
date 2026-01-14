@@ -6,9 +6,12 @@ export const dashboardTemplates: DashboardTemplate[] = [
     name: 'Analytics Dashboard',
     description: 'Track metrics, KPIs, and data trends with charts and graphs',
     category: 'Business',
-    preview: '📊',
+    tags: ['analytics', 'metrics', 'charts'],
     config: {
+      name: 'Analytics Dashboard',
+      description: 'Track metrics, KPIs, and data trends with charts and graphs',
       type: 'analytics',
+      components: [],
       layout: {
         type: 'grid',
         columns: 12,
@@ -22,9 +25,12 @@ export const dashboardTemplates: DashboardTemplate[] = [
     name: 'CRM Dashboard',
     description: 'Manage customers, leads, and sales pipeline',
     category: 'Sales',
-    preview: '👥',
+    tags: ['crm', 'sales', 'customers'],
     config: {
+      name: 'CRM Dashboard',
+      description: 'Manage customers, leads, and sales pipeline',
       type: 'crm',
+      components: [],
       layout: {
         type: 'grid',
         columns: 12,
@@ -38,9 +44,12 @@ export const dashboardTemplates: DashboardTemplate[] = [
     name: 'Project Management',
     description: 'Track tasks, milestones, and team progress',
     category: 'Productivity',
-    preview: '📋',
+    tags: ['projects', 'tasks', 'productivity'],
     config: {
+      name: 'Project Management',
+      description: 'Track tasks, milestones, and team progress',
       type: 'project',
+      components: [],
       layout: {
         type: 'grid',
         columns: 12,
@@ -54,9 +63,12 @@ export const dashboardTemplates: DashboardTemplate[] = [
     name: 'System Monitoring',
     description: 'Real-time metrics, alerts, and system health',
     category: 'DevOps',
-    preview: '🖥️',
+    tags: ['monitoring', 'system', 'devops'],
     config: {
+      name: 'System Monitoring',
+      description: 'Real-time metrics, alerts, and system health',
       type: 'monitoring',
+      components: [],
       layout: {
         type: 'grid',
         columns: 12,
@@ -70,9 +82,12 @@ export const dashboardTemplates: DashboardTemplate[] = [
     name: 'Social Media Dashboard',
     description: 'Engagement metrics, content calendar, and audience insights',
     category: 'Marketing',
-    preview: '📱',
+    tags: ['social', 'marketing', 'engagement'],
     config: {
+      name: 'Social Media Dashboard',
+      description: 'Engagement metrics, content calendar, and audience insights',
       type: 'social',
+      components: [],
       layout: {
         type: 'grid',
         columns: 12,
@@ -86,9 +101,12 @@ export const dashboardTemplates: DashboardTemplate[] = [
     name: 'E-Commerce Dashboard',
     description: 'Sales, inventory, orders, and customer analytics',
     category: 'Retail',
-    preview: '🛍️',
+    tags: ['ecommerce', 'sales', 'retail'],
     config: {
+      name: 'E-Commerce Dashboard',
+      description: 'Sales, inventory, orders, and customer analytics',
       type: 'ecommerce',
+      components: [],
       layout: {
         type: 'grid',
         columns: 12,
@@ -102,9 +120,12 @@ export const dashboardTemplates: DashboardTemplate[] = [
     name: 'Financial Dashboard',
     description: 'Revenue, expenses, cash flow, and financial forecasting',
     category: 'Finance',
-    preview: '💰',
+    tags: ['finance', 'revenue', 'expenses'],
     config: {
+      name: 'Financial Dashboard',
+      description: 'Revenue, expenses, cash flow, and financial forecasting',
       type: 'finance',
+      components: [],
       layout: {
         type: 'grid',
         columns: 12,
@@ -118,9 +139,12 @@ export const dashboardTemplates: DashboardTemplate[] = [
     name: 'HR Dashboard',
     description: 'Employee data, recruitment, performance, and attendance',
     category: 'Human Resources',
-    preview: '👔',
+    tags: ['hr', 'employees', 'recruitment'],
     config: {
+      name: 'HR Dashboard',
+      description: 'Employee data, recruitment, performance, and attendance',
       type: 'hr',
+      components: [],
       layout: {
         type: 'grid',
         columns: 12,

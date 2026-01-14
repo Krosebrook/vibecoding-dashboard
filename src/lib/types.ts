@@ -125,3 +125,110 @@ export interface ValidationResult {
   errors: string[]
   suggestions: string[]
 }
+
+export type DashboardType = 
+  | 'analytics' 
+  | 'crm' 
+  | 'project' 
+  | 'monitoring' 
+  | 'social' 
+  | 'social-media'
+  | 'ecommerce' 
+  | 'custom'
+  | 'business-intelligence'
+  | 'sales'
+  | 'finance'
+  | 'hr'
+
+export type ComponentType = 
+  | 'metric-card' 
+  | 'line-chart' 
+  | 'bar-chart' 
+  | 'pie-chart' 
+  | 'area-chart' 
+  | 'radar-chart'
+  | 'composed-chart'
+  | 'scatter-chart'
+  | 'data-table' 
+  | 'stat-grid' 
+  | 'progress-bar' 
+  | 'activity-feed' 
+  | 'user-list' 
+  | 'calendar' 
+  | 'kanban-board' 
+  | 'form' 
+  | 'text-block'
+  | 'cpu-monitor'
+  | 'memory-monitor'
+  | 'network-monitor'
+  | 'server-status'
+  | 'alert-list'
+  | 'realtime-chart'
+
+export interface DashboardComponent {
+  id: string
+  type: ComponentType
+  title: string
+  description?: string
+  position: {
+    row: number
+    col: number
+  }
+  size: {
+    rows: number
+    cols: number
+  }
+  props: Record<string, any>
+}
+
+export interface DashboardLayout {
+  type: 'grid' | 'flex'
+  columns: number
+  gap: number
+  padding?: number
+}
+
+export interface DashboardConfig {
+  id?: string
+  name: string
+  description: string
+  type: DashboardType
+  components: DashboardComponent[]
+  layout: DashboardLayout
+  theme?: {
+    primary: string
+    secondary: string
+    accent: string
+  }
+  dataModel?: {
+    entities: Array<{
+      name: string
+      fields: Array<{
+        name: string
+        type: string
+        required?: boolean
+      }>
+    }>
+    seedData: Record<string, any[]>
+  }
+  createdAt?: string
+  updatedAt?: string
+}
+
+export interface DashboardTemplate {
+  id: string
+  name: string
+  description: string
+  category: string
+  config: DashboardConfig
+  tags: string[]
+  isPopular?: boolean
+}
+
+export type GenerationStage = 'analyzing' | 'modeling' | 'designing' | 'generating' | 'complete'
+
+export interface GenerationProgress {
+  stage: GenerationStage
+  progress: number
+  message: string
+}

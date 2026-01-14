@@ -35,7 +35,7 @@ export function DatabaseConnectorManager() {
   const handleSaveConnector = () => {
     if (!selectedConnector) return
 
-    const validation = validateDatabaseConfig(selectedConnector.config)
+    const validation = validateDatabaseConfig(selectedConnector)
     if (!validation.valid) {
       toast.error(validation.errors.join(', '))
       return
