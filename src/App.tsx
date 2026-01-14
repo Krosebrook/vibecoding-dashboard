@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useKV } from '@github/spark/hooks'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Card } from '@/components/ui/card'
-import { Database, GitBranch, Play, Clock, ArrowsLeftRight, Flask, BookOpen, Lightning, FileCode, Calendar, MagnifyingGlass, FlowArrow, Gauge, Shield, ChartLine } from '@phosphor-icons/react'
+import { Database, GitBranch, Play, Clock, ArrowsLeftRight, Flask, BookOpen, Lightning, FileCode, Calendar, MagnifyingGlass, FlowArrow, Gauge, Shield, ChartLine, Users, ShieldWarning } from '@phosphor-icons/react'
 import { DatabaseConnection, MigrationConfig, FieldMapping, MigrationExecution } from '@/lib/types'
 import { ConnectionManager } from '@/components/migration/ConnectionManager'
 import { SchemaMapping } from '@/components/migration/SchemaMapping'
@@ -18,6 +18,9 @@ import { TransformationPipelineBuilder } from '@/components/migration/Transforma
 import { PerformanceMonitor } from '@/components/migration/PerformanceMonitor'
 import { BatchManager } from '@/components/migration/BatchManager'
 import { DataQualityDashboard } from '@/components/migration/DataQualityDashboard'
+import { CollaborationPanel } from '@/components/migration/CollaborationPanel'
+import { TypeConflictResolver } from '@/components/migration/TypeConflictResolver'
+import { MigrationImpactAnalyzer } from '@/components/migration/MigrationImpactAnalyzer'
 import { toast } from 'sonner'
 
 function App() {
@@ -79,7 +82,7 @@ function App() {
 
       <div className="container mx-auto px-6 py-8">
         <Tabs value={currentTab} onValueChange={setCurrentTab} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4 lg:grid-cols-9 xl:grid-cols-14 max-w-full overflow-x-auto">
+          <TabsList className="grid w-full grid-cols-4 lg:grid-cols-9 xl:grid-cols-17 max-w-full overflow-x-auto">
             <TabsTrigger value="connections" className="gap-2">
               <Database size={16} />
               <span className="hidden sm:inline">Connections</span>
@@ -99,6 +102,14 @@ function App() {
             <TabsTrigger value="mapping" className="gap-2" disabled={!sourceConnection || !destConnection}>
               <GitBranch size={16} />
               <span className="hidden sm:inline">Mapping</span>
+            </TabsTrigger>
+            <TabsTrigger value="conflicts" className="gap-2" disabled={!sourceConnection || !destConnection}>
+              <ShieldWarning size={16} />
+              <span className="hidden sm:inline">Conflicts</span>
+            </TabsTrigger>
+            <TabsTrigger value="impact" className="gap-2">
+              <ChartLine size={16} />
+              <span className="hidden sm:inline">Impact</span>
             </TabsTrigger>
             <TabsTrigger value="pipeline" className="gap-2">
               <FlowArrow size={16} />
@@ -135,6 +146,10 @@ function App() {
             <TabsTrigger value="history" className="gap-2">
               <Clock size={16} />
               <span className="hidden sm:inline">History</span>
+            </TabsTrigger>
+            <TabsTrigger value="collaborate" className="gap-2">
+              <Users size={16} />
+              <span className="hidden sm:inline">Collaborate</span>
             </TabsTrigger>
           </TabsList>
 
@@ -330,6 +345,30 @@ function App() {
               executions={executions || []}
               onRollback={handleRollback}
             />
+          </TabsContent>
+
+          <TabsContent value="conflicts">
+            <TypeConflictResolver
+              sourceConnection={sourceConnection}
+              destinationConnection={destConnection}
+              mappings={mappings}
+              onResolutionApplied={(updatedMappings) => {
+                setMappings(updatedMappings)
+                toast.success('Conflict resolutions applied to mappings')
+              }}
+            />
+          </TabsContent>
+
+          <TabsContent value="impact">
+            <MigrationImpactAnalyzer
+              config={currentConfig}
+              sourceConnection={sourceConnection}
+              destinationConnection={destConnection}
+            />
+          </TabsContent>
+
+          <TabsContent value="collaborate">
+            <CollaborationPanel />
           </TabsContent>
         </Tabs>
       </div>

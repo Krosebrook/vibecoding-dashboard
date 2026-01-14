@@ -306,3 +306,81 @@ export interface DataQualityReport {
     affectedRecords: number
   }>
 }
+
+export interface CollaborationUser {
+  id: string
+  login: string
+  avatarUrl: string
+  email: string
+  isOwner: boolean
+}
+
+export interface CollaborationActivity {
+  id: string
+  userId: string
+  userName: string
+  userAvatar: string
+  action: 'joined' | 'left' | 'modified-mapping' | 'started-migration' | 'paused-migration' | 'added-connection' | 'commented'
+  timestamp: string
+  details?: string
+}
+
+export interface CollaborationComment {
+  id: string
+  userId: string
+  userName: string
+  userAvatar: string
+  message: string
+  timestamp: string
+  resolved: boolean
+}
+
+export interface TypeConflict {
+  id: string
+  sourceTable: string
+  sourceField: string
+  sourceType: string
+  destinationTable: string
+  destinationField: string
+  destinationType: string
+  severity: 'low' | 'medium' | 'high'
+  possibleLoss: boolean
+  affectedRecords: number
+  suggestedResolution?: {
+    method: 'cast' | 'truncate' | 'round' | 'format' | 'map' | 'skip'
+    description: string
+    confidence: number
+  }
+}
+
+export interface MigrationImpactAnalysis {
+  migrationId: string
+  timestamp: string
+  estimatedDuration: number
+  estimatedDataSize: number
+  resourceRequirements: {
+    cpu: number
+    memory: number
+    disk: number
+    network: number
+  }
+  risks: Array<{
+    id: string
+    type: 'data-loss' | 'performance' | 'compatibility' | 'security'
+    severity: 'low' | 'medium' | 'high' | 'critical'
+    description: string
+    mitigation: string
+    probability: number
+  }>
+  dependencies: Array<{
+    table: string
+    dependsOn: string[]
+    reason: string
+  }>
+  recommendations: string[]
+  estimatedCost?: {
+    timeMinutes: number
+    resourceUnits: number
+    complexity: 'simple' | 'moderate' | 'complex' | 'very-complex'
+  }
+}
