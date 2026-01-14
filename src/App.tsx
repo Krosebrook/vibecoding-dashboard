@@ -2,12 +2,18 @@ import { useState } from 'react'
 import { useKV } from '@github/spark/hooks'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Card } from '@/components/ui/card'
-import { Database, GitBranch, Play, Clock, ArrowsLeftRight } from '@phosphor-icons/react'
+import { Database, GitBranch, Play, Clock, ArrowsLeftRight, Flask, BookOpen, Lightning, FileCode, Calendar } from '@phosphor-icons/react'
 import { DatabaseConnection, MigrationConfig, FieldMapping, MigrationExecution } from '@/lib/types'
 import { ConnectionManager } from '@/components/migration/ConnectionManager'
 import { SchemaMapping } from '@/components/migration/SchemaMapping'
 import { MigrationExecutor } from '@/components/migration/MigrationExecutor'
 import { MigrationHistory } from '@/components/migration/MigrationHistory'
+import { DataValidator } from '@/components/migration/DataValidator'
+import { TemplateLibrary } from '@/components/migration/TemplateLibrary'
+import { AutoMapper } from '@/components/migration/AutoMapper'
+import { ScriptGenerator } from '@/components/migration/ScriptGenerator'
+import { ScheduleMigration } from '@/components/migration/ScheduleMigration'
+import { toast } from 'sonner'
 
 function App() {
   const [connections, setConnections] = useKV<DatabaseConnection[]>('db-connections', [])
@@ -17,6 +23,7 @@ function App() {
   const [destConnection, setDestConnection] = useState<DatabaseConnection | null>(null)
   const [mappings, setMappings] = useState<FieldMapping[]>([])
   const [currentTab, setCurrentTab] = useState('connections')
+  const [configs, setConfigs] = useKV<MigrationConfig[]>('migration-configs', [])
 
   const currentConfig: MigrationConfig | null = (sourceConnection && destConnection && mappings.length > 0) ? {
     id: `config-${Date.now()}`,
@@ -67,22 +74,42 @@ function App() {
 
       <div className="container mx-auto px-6 py-8">
         <Tabs value={currentTab} onValueChange={setCurrentTab} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4 max-w-2xl">
+          <TabsList className="grid w-full grid-cols-4 lg:grid-cols-9 max-w-5xl">
             <TabsTrigger value="connections" className="gap-2">
               <Database size={16} />
-              Connections
+              <span className="hidden sm:inline">Connections</span>
+            </TabsTrigger>
+            <TabsTrigger value="auto-mapper" className="gap-2">
+              <Lightning size={16} />
+              <span className="hidden sm:inline">Auto-Map</span>
+            </TabsTrigger>
+            <TabsTrigger value="templates" className="gap-2">
+              <BookOpen size={16} />
+              <span className="hidden sm:inline">Templates</span>
             </TabsTrigger>
             <TabsTrigger value="mapping" className="gap-2" disabled={!sourceConnection || !destConnection}>
               <GitBranch size={16} />
-              Mapping
+              <span className="hidden sm:inline">Mapping</span>
+            </TabsTrigger>
+            <TabsTrigger value="validator" className="gap-2">
+              <Flask size={16} />
+              <span className="hidden sm:inline">Validate</span>
             </TabsTrigger>
             <TabsTrigger value="execution" className="gap-2" disabled={!currentConfig}>
               <Play size={16} />
-              Execute
+              <span className="hidden sm:inline">Execute</span>
+            </TabsTrigger>
+            <TabsTrigger value="scripts" className="gap-2">
+              <FileCode size={16} />
+              <span className="hidden sm:inline">Scripts</span>
+            </TabsTrigger>
+            <TabsTrigger value="schedule" className="gap-2">
+              <Calendar size={16} />
+              <span className="hidden sm:inline">Schedule</span>
             </TabsTrigger>
             <TabsTrigger value="history" className="gap-2">
               <Clock size={16} />
-              History
+              <span className="hidden sm:inline">History</span>
             </TabsTrigger>
           </TabsList>
 
@@ -183,6 +210,30 @@ function App() {
             </div>
           </TabsContent>
 
+          <TabsContent value="auto-mapper">
+            <AutoMapper
+              sourceConnection={sourceConnection}
+              destinationConnection={destConnection}
+              onMappingsGenerated={(newMappings) => {
+                setMappings(newMappings)
+                toast.success('Auto-generated mappings applied')
+                setCurrentTab('mapping')
+              }}
+            />
+          </TabsContent>
+
+          <TabsContent value="templates">
+            <TemplateLibrary
+              onTemplateSelect={(template) => {
+                toast.info(`Loading template: ${template.name}`)
+                setCurrentTab('mapping')
+              }}
+              onSaveAsTemplate={(config) => {
+                setConfigs((current) => [...(current || []), config])
+              }}
+            />
+          </TabsContent>
+
           <TabsContent value="mapping">
             <SchemaMapping
               sourceConnection={sourceConnection}
@@ -192,11 +243,31 @@ function App() {
             />
           </TabsContent>
 
+          <TabsContent value="validator">
+            <DataValidator
+              sourceConnection={sourceConnection}
+              destinationConnection={destConnection}
+              onValidationComplete={(hasErrors) => {
+                if (!hasErrors) {
+                  toast.success('Validation passed! Ready to execute')
+                }
+              }}
+            />
+          </TabsContent>
+
           <TabsContent value="execution">
             <MigrationExecutor
               config={currentConfig}
               onExecutionComplete={handleExecutionComplete}
             />
+          </TabsContent>
+
+          <TabsContent value="scripts">
+            <ScriptGenerator config={currentConfig} />
+          </TabsContent>
+
+          <TabsContent value="schedule">
+            <ScheduleMigration configs={configs || []} />
           </TabsContent>
 
           <TabsContent value="history">

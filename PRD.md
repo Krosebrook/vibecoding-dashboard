@@ -19,12 +19,33 @@ This application handles sophisticated data operations including schema mapping,
 - **Progression**: User selects DB type → Enters credentials → Tests connection → Saves connection → Connection appears in list
 - **Success criteria**: Connection validates successfully and can be reused across migrations
 
+### AI-Powered Auto-Mapper
+- **Functionality**: Automatically generate field mappings using pattern recognition or AI semantic analysis
+- **Purpose**: Dramatically reduce manual mapping work by intelligently matching fields
+- **Trigger**: User selects source and destination connections, clicks "Generate Mappings"
+- **Progression**: User chooses AI mode (pattern/semantic) → Sets confidence threshold → Generates mappings → Reviews suggestions → Applies accepted mappings
+- **Success criteria**: Accurately maps 80%+ of fields with high confidence scores
+
+### Migration Template Library
+- **Functionality**: Browse and apply pre-configured mapping templates for common migration scenarios
+- **Purpose**: Accelerate migrations with battle-tested configurations
+- **Trigger**: User navigates to Templates tab
+- **Progression**: User searches/filters templates → Previews template details → Selects template → Mappings auto-populate → User customizes as needed
+- **Success criteria**: Templates reduce configuration time by 70% for common scenarios
+
 ### Visual Schema Mapper
 - **Functionality**: Display source and destination schemas side-by-side with drag-and-drop field mapping
 - **Purpose**: Enable users to visually map how data should flow between different structures
 - **Trigger**: User selects source and destination connections
 - **Progression**: Schemas load → User drags source fields to destination fields → Mapping lines appear → Transformation rules can be added → Mapping saved
 - **Success criteria**: All required fields are mapped and transformation rules are clearly visible
+
+### Data Validation Engine
+- **Functionality**: Pre-migration validation checks for type compatibility, null handling, uniqueness, referential integrity, and format compliance
+- **Purpose**: Identify and prevent data migration issues before execution
+- **Trigger**: User clicks "Run Validation" after configuring mappings
+- **Progression**: Validation rules generated → Each check runs with progress → Results displayed with pass/warn/fail → User addresses issues → Ready to execute
+- **Success criteria**: Catches 95%+ of potential migration issues before execution
 
 ### Data Transformation Rules
 - **Functionality**: Apply transformations during migration (type conversion, value mapping, calculated fields, filtering)
@@ -39,6 +60,20 @@ This application handles sophisticated data operations including schema mapping,
 - **Trigger**: User clicks "Start Migration" after configuring mapping
 - **Progression**: Validation runs → Batch processing begins → Progress bar updates → Errors logged → Completion notification → Summary report
 - **Success criteria**: Data transfers accurately with detailed progress feedback and error recovery options
+
+### Script Generator
+- **Functionality**: Generate executable migration scripts in SQL, Python, and Node.js
+- **Purpose**: Enable migrations outside the UI for automation and integration
+- **Trigger**: User navigates to Scripts tab with configured migration
+- **Progression**: User selects language → Script generates → User previews → Copies or downloads script → Executes in their environment
+- **Success criteria**: Generated scripts run successfully with proper error handling and transactions
+
+### Migration Scheduler
+- **Functionality**: Schedule migrations to run automatically at specified times or intervals
+- **Purpose**: Automate recurring migrations and execute during optimal time windows
+- **Trigger**: User clicks "New Schedule" in Schedule tab
+- **Progression**: User selects migration config → Chooses schedule type (once/daily/weekly/monthly) → Sets time → Enables schedule → Migration runs automatically
+- **Success criteria**: Scheduled migrations execute reliably at specified times with proper logging
 
 ### Migration History & Rollback
 - **Functionality**: Track all migrations with ability to view details and rollback if needed
