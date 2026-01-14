@@ -22,7 +22,7 @@ export function DashboardPreview({ config }: DashboardPreviewProps) {
           <ComponentRenderer
             key={component.id}
             component={component}
-            data={config.dataModel.seedData}
+            data={config.dataModel?.seedData || {}}
           />
         ))}
       </div>

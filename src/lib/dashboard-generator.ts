@@ -124,7 +124,7 @@ export function generateSetupInstructions(config: DashboardConfig): string {
 ${config.description}
 
 **Dashboard Type**: ${config.type}  
-**Created**: ${new Date(config.createdAt).toLocaleString()}  
+**Created**: ${config.createdAt ? new Date(config.createdAt).toLocaleString() : 'Just now'}  
 **Components**: ${config.components.length}
 
 ## Quick Start
@@ -132,21 +132,21 @@ ${config.description}
 ### 1. Data Model
 This dashboard uses the following data entities:
 
-${config.dataModel.entities.map(entity => `
+${config.dataModel ? config.dataModel.entities.map(entity => `
 #### ${entity.name}
 \`\`\`typescript
 interface ${entity.name} {
 ${entity.fields.map(field => `  ${field.name}${field.required ? '' : '?'}: ${field.type}`).join('\n')}
 }
 \`\`\`
-`).join('\n')}
+`).join('\n') : 'No data model defined'}
 
 ### 2. Seed Data
 Sample data is provided for testing. In production, replace with your API endpoints:
 
-${Object.keys(config.dataModel.seedData).map(key => `
-**${key}**: ${config.dataModel.seedData[key].length} records
-`).join('\n')}
+${config.dataModel ? Object.keys(config.dataModel.seedData).map(key => `
+**${key}**: ${config.dataModel!.seedData[key].length} records
+`).join('\n') : 'No seed data provided'}
 
 ### 3. Components
 This dashboard includes ${config.components.length} components:
@@ -162,7 +162,7 @@ ${idx + 1}. **${comp.title || comp.type}** (${comp.type})
 - **Type**: ${config.layout.type}
 - **Columns**: ${config.layout.columns}
 - **Gap**: ${config.layout.gap}px
-- **Padding**: ${config.layout.padding}px
+- **Padding**: ${config.layout.padding || 0}px
 
 ### 5. Customization
 
@@ -175,9 +175,9 @@ const data = await fetch('your-api-endpoint').then(r => r.json())
 
 #### Styling
 The dashboard uses these theme variables:
-- Primary: \`${config.theme.primaryColor}\`
-- Accent: \`${config.theme.accentColor}\`
-- Background: \`${config.theme.backgroundColor}\`
+- Primary: \`${config.theme?.primary || '#000'}\`
+- Secondary: \`${config.theme?.secondary || '#666'}\`
+- Accent: \`${config.theme?.accent || '#0066cc'}\`
 
 #### Adding Components
 To add new components, use the refinement feature or manually extend the configuration.
