@@ -117,13 +117,13 @@ function App() {
             <ConnectionManager
               connections={connections || []}
               onConnectionsChange={setConnections}
+              onSelectSource={setSourceConnection}
+              onSelectDestination={setDestConnection}
             />
             
             <div className="grid md:grid-cols-2 gap-6">
               <Card className="p-6">
                 <h3 className="text-lg font-semibold mb-4">Source Database</h3>
-                {sourceConnection ? (
-                  <div className="p-4 bg-muted rounded-lg">
                     <div className="flex items-center justify-between">
                       <div>
                         <h4 className="font-semibold">{sourceConnection.name}</h4>
