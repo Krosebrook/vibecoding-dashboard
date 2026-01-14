@@ -232,3 +232,77 @@ export interface GenerationProgress {
   progress: number
   message: string
 }
+
+export interface QueryResult {
+  columns: string[]
+  rows: any[]
+  rowCount: number
+  executionTime: number
+}
+
+export interface TransformationStep {
+  id: string
+  type: 'filter' | 'map' | 'aggregate' | 'join' | 'sort' | 'deduplicate' | 'validate'
+  name: string
+  config: Record<string, any>
+  enabled: boolean
+  order: number
+}
+
+export interface TransformationPipeline {
+  id: string
+  name: string
+  description?: string
+  steps: TransformationStep[]
+  sourceConnectionId: string
+  destinationConnectionId?: string
+  createdAt: string
+  updatedAt: string
+}
+
+export interface PerformanceMetrics {
+  migrationId: string
+  timestamp: string
+  recordsPerSecond: number
+  bytesPerSecond: number
+  cpuUsage: number
+  memoryUsage: number
+  errorRate: number
+  avgRecordSize: number
+  estimatedTimeRemaining: number
+}
+
+export interface BatchConfig {
+  size: number
+  parallel: number
+  delayMs: number
+  retryAttempts: number
+  retryDelayMs: number
+}
+
+export interface DataQualityMetric {
+  id: string
+  name: string
+  value: number
+  status: 'good' | 'warning' | 'critical'
+  description: string
+  timestamp: string
+}
+
+export interface DataQualityReport {
+  migrationId?: string
+  connectionId?: string
+  timestamp: string
+  completeness: number
+  accuracy: number
+  consistency: number
+  timeliness: number
+  validity: number
+  metrics: DataQualityMetric[]
+  issues: Array<{
+    field: string
+    issue: string
+    severity: 'low' | 'medium' | 'high'
+    affectedRecords: number
+  }>
+}

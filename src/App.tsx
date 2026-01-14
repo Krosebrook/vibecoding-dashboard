@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useKV } from '@github/spark/hooks'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Card } from '@/components/ui/card'
-import { Database, GitBranch, Play, Clock, ArrowsLeftRight, Flask, BookOpen, Lightning, FileCode, Calendar } from '@phosphor-icons/react'
+import { Database, GitBranch, Play, Clock, ArrowsLeftRight, Flask, BookOpen, Lightning, FileCode, Calendar, MagnifyingGlass, FlowArrow, Gauge, Shield, ChartLine } from '@phosphor-icons/react'
 import { DatabaseConnection, MigrationConfig, FieldMapping, MigrationExecution } from '@/lib/types'
 import { ConnectionManager } from '@/components/migration/ConnectionManager'
 import { SchemaMapping } from '@/components/migration/SchemaMapping'
@@ -13,6 +13,11 @@ import { TemplateLibrary } from '@/components/migration/TemplateLibrary'
 import { AutoMapper } from '@/components/migration/AutoMapper'
 import { ScriptGenerator } from '@/components/migration/ScriptGenerator'
 import { ScheduleMigration } from '@/components/migration/ScheduleMigration'
+import { DataPreviewQuery } from '@/components/migration/DataPreviewQuery'
+import { TransformationPipelineBuilder } from '@/components/migration/TransformationPipelineBuilder'
+import { PerformanceMonitor } from '@/components/migration/PerformanceMonitor'
+import { BatchManager } from '@/components/migration/BatchManager'
+import { DataQualityDashboard } from '@/components/migration/DataQualityDashboard'
 import { toast } from 'sonner'
 
 function App() {
@@ -74,10 +79,14 @@ function App() {
 
       <div className="container mx-auto px-6 py-8">
         <Tabs value={currentTab} onValueChange={setCurrentTab} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4 lg:grid-cols-9 max-w-5xl">
+          <TabsList className="grid w-full grid-cols-4 lg:grid-cols-9 xl:grid-cols-14 max-w-full overflow-x-auto">
             <TabsTrigger value="connections" className="gap-2">
               <Database size={16} />
               <span className="hidden sm:inline">Connections</span>
+            </TabsTrigger>
+            <TabsTrigger value="preview" className="gap-2">
+              <MagnifyingGlass size={16} />
+              <span className="hidden sm:inline">Preview</span>
             </TabsTrigger>
             <TabsTrigger value="auto-mapper" className="gap-2">
               <Lightning size={16} />
@@ -91,13 +100,29 @@ function App() {
               <GitBranch size={16} />
               <span className="hidden sm:inline">Mapping</span>
             </TabsTrigger>
+            <TabsTrigger value="pipeline" className="gap-2">
+              <FlowArrow size={16} />
+              <span className="hidden sm:inline">Pipeline</span>
+            </TabsTrigger>
             <TabsTrigger value="validator" className="gap-2">
               <Flask size={16} />
               <span className="hidden sm:inline">Validate</span>
             </TabsTrigger>
+            <TabsTrigger value="quality" className="gap-2">
+              <Shield size={16} />
+              <span className="hidden sm:inline">Quality</span>
+            </TabsTrigger>
+            <TabsTrigger value="batch" className="gap-2">
+              <Gauge size={16} />
+              <span className="hidden sm:inline">Batch</span>
+            </TabsTrigger>
             <TabsTrigger value="execution" className="gap-2" disabled={!currentConfig}>
               <Play size={16} />
               <span className="hidden sm:inline">Execute</span>
+            </TabsTrigger>
+            <TabsTrigger value="performance" className="gap-2">
+              <ChartLine size={16} />
+              <span className="hidden sm:inline">Monitor</span>
             </TabsTrigger>
             <TabsTrigger value="scripts" className="gap-2">
               <FileCode size={16} />
@@ -117,8 +142,6 @@ function App() {
             <ConnectionManager
               connections={connections || []}
               onConnectionsChange={setConnections}
-              onSelectSource={setSourceConnection}
-              onSelectDestination={setDestConnection}
             />
             
             <div className="grid md:grid-cols-2 gap-6">
@@ -224,6 +247,12 @@ function App() {
             />
           </TabsContent>
 
+          <TabsContent value="preview">
+            <DataPreviewQuery
+              connection={sourceConnection || destConnection}
+            />
+          </TabsContent>
+
           <TabsContent value="templates">
             <TemplateLibrary
               onTemplateSelect={(template) => {
@@ -245,6 +274,13 @@ function App() {
             />
           </TabsContent>
 
+          <TabsContent value="pipeline">
+            <TransformationPipelineBuilder
+              sourceConnection={sourceConnection}
+              destinationConnection={destConnection}
+            />
+          </TabsContent>
+
           <TabsContent value="validator">
             <DataValidator
               sourceConnection={sourceConnection}
@@ -257,10 +293,27 @@ function App() {
             />
           </TabsContent>
 
+          <TabsContent value="quality">
+            <DataQualityDashboard
+              connection={sourceConnection || destConnection}
+            />
+          </TabsContent>
+
+          <TabsContent value="batch">
+            <BatchManager />
+          </TabsContent>
+
           <TabsContent value="execution">
             <MigrationExecutor
               config={currentConfig}
               onExecutionComplete={handleExecutionComplete}
+            />
+          </TabsContent>
+
+          <TabsContent value="performance">
+            <PerformanceMonitor
+              execution={executions && executions.length > 0 ? executions[executions.length - 1] : null}
+              isRunning={false}
             />
           </TabsContent>
 
